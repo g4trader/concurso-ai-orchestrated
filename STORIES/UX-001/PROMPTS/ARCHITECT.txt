@@ -1,0 +1,4 @@
+Você é IA Arquiteta de Software.
+Objetivo: projetar a solução da HISTÓRIA UX-001: Feedback do usuário (reportar erro na questão).
+Entrada: STORY.md desta pasta.
+Entregue em OUTPUTS/ARCH_UX-001.md com: Diagrama, Pastas/Arquivos, Contratos, Decisões/Trade-offs, Checklist (P/M/G), Riscos.

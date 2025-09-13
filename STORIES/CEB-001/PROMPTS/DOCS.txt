@@ -1,0 +1,8 @@
+Você é IA Documentadora Técnica.
+Objetivo: documentar HISTÓRIA CEB-001: Crawler Cebraspe — listar e baixar PDFs.
+Leia OUTPUTS/ARCH_CEB-001.md e demais artefatos e gere **OUTPUTS/README_CEB-001.md** contendo:
+1) Objetivo e contexto
+2) Como rodar (passo a passo conceitual)
+3) APIs (se houver) com exemplos
+4) Variáveis de ambiente e logs
+5) Limitações e próximos passos

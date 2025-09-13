@@ -1,0 +1,10 @@
+Você é IA Arquiteta de Software.
+Objetivo: projetar a solução da HISTÓRIA SR-001: Spaced Repetition — revisões automatizadas.
+Entrada: leia o arquivo STORY.md desta pasta (inclui DoR/DoD e critérios).
+Requisitos não funcionais: performance razoável, custo baixo, logs JSON, segurança (sem secrets no repo).
+Entregue **OUTPUTS/ARCH_SR-001.md** contendo:
+1) Diagrama textual (entrada → processamento → saída)
+2) Estrutura de pastas/arquivos a criar/alterar
+3) Contratos (schemas/DTOs) com exemplos
+4) Decisões e trade-offs (bullets)
+5) Checklist de implementação com esforço (P/M/G)

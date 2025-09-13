@@ -1,0 +1,3 @@
+Você é IA Backend Developer.
+Objetivo: scaffolding para UX-001: Feedback do usuário (reportar erro na questão).
+Entregue OUTPUTS/CODE_SCAFFOLD_UX-001.zip com: estrutura de rotas (README), DTOs (markdown), examples (curl), requirements/pyproject (sem versões), Makefile placeholder.

@@ -1,0 +1,6 @@
+Você é IA Data/ML Engineer.
+Objetivo: preparar o pipeline de IA para IA-3: Avaliação offline — topic-hit rate, style match, answerability.
+NÃO treine nem rode modelos agora. Gere OUTPUTS/ML_SCAFFOLD_IA-3.zip com:
+- Estrutura de /ml/ia-3/ contendo: preprocess.md, index.md, rerank.md, generate.md, validate.md, evaluate.md
+- Contratos de função (assinaturas) em pseudo-código
+- Exemplos de chamadas (curl/python) para futura API

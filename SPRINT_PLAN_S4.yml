@@ -1,0 +1,18 @@
+sprint: 4
+objective: Frontend & Go‑to‑Market (MVP)
+stories:
+- id: WEB-001
+  path: playdevs/STORIES/WEB-001/ORDER.yml
+- id: WEB-002
+  path: playdevs/STORIES/WEB-002/ORDER.yml
+- id: WEB-003
+  path: playdevs/STORIES/WEB-003/ORDER.yml
+- id: WEB-004
+  path: playdevs/STORIES/WEB-004/ORDER.yml
+- id: UX-001
+  path: playdevs/STORIES/UX-001/ORDER.yml
+- id: OPS-001
+  path: playdevs/STORIES/OPS-001/ORDER.yml
+- id: OPS-002
+  path: playdevs/STORIES/OPS-002/ORDER.yml
+milestone: MVP acessível com experiência ponta‑a‑ponta

@@ -1,0 +1,8 @@
+Você é IA Code Reviewer.
+Entrada: OUTPUTS/ de IA-3.
+Entregue OUTPUTS/REVIEW_IA-3.md com:
+- Pontos fortes
+- Riscos
+- Gaps
+- MUST-FIX / SHOULD-IMPROVE
+- Nota (A/B/C) e recomendação

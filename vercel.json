@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "public": true,
+  "builds": [
+    {
+      "src": "playdevs/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "^/$",
+      "dest": "/playdevs/PITCH_REVEAL.html"
+    },
+    {
+      "src": "^/(.*)$",
+      "dest": "/playdevs/$1"
+    }
+  ]
+}

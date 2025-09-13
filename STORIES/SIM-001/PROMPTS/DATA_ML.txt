@@ -1,0 +1,7 @@
+Você é IA Data/ML Engineer.
+Objetivo: preparar o pipeline de IA para HISTÓRIA SIM-001: Motor de Simulados — geração no estilo da banca.
+NÃO TREINE NEM SUBA MODELOS NESTE PASSO — gere um pacote .zip de **esqueleto** do pipeline (pré-processamento, inferência, avaliação) com READMEs.
+Entregue **OUTPUTS/ML_SCAFFOLD_SIM-001.zip** contendo:
+- /ml/sim-001/preprocess.md, infer.md, evaluate.md (descrição de entradas/saídas)
+- contratos de função (assinaturas esperadas) em pseudo-código
+- exemplos de chamadas (curl/python) para futura API

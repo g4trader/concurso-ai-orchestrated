@@ -1,0 +1,74 @@
+steps:
+- role: Arquiteta
+  input: STORY.md
+  prompt: PROMPTS/ARCHITECT.txt
+  output: OUTPUTS/ARCH_IA-0.md
+  postconditions:
+  - file_exists: OUTPUTS/ARCH_IA-0.md
+  - contains:
+      file: OUTPUTS/ARCH_IA-0.md
+      must_include:
+      - Diagrama
+      - Pastas
+      - Contratos
+      - Decisões
+      - Checklist
+      - Riscos
+- role: Data/ML
+  input: OUTPUTS/ARCH_IA-0.md
+  prompt: PROMPTS/DATA_ML.txt
+  output: OUTPUTS/ML_SCAFFOLD_IA-0.zip
+  postconditions:
+  - file_exists: OUTPUTS/ML_SCAFFOLD_IA-0.zip
+- role: Backend
+  input: OUTPUTS/ARCH_IA-0.md
+  prompt: PROMPTS/BACKEND.txt
+  output: OUTPUTS/CODE_SCAFFOLD_IA-0.zip
+  postconditions:
+  - file_exists: OUTPUTS/CODE_SCAFFOLD_IA-0.zip
+- role: QA
+  input: OUTPUTS/CODE_SCAFFOLD_IA-0.zip
+  prompt: PROMPTS/QA.txt
+  output: OUTPUTS/TEST_SPEC_IA-0.md
+  postconditions:
+  - file_exists: OUTPUTS/TEST_SPEC_IA-0.md
+  - contains:
+      file: OUTPUTS/TEST_SPEC_IA-0.md
+      must_include:
+      - Casos felizes
+      - erro
+      - mocks
+      - Timeouts
+      - cobertura
+- role: Docs
+  input:
+  - OUTPUTS/ARCH_IA-0.md
+  - OUTPUTS/TEST_SPEC_IA-0.md
+  prompt: PROMPTS/DOCS.txt
+  output: OUTPUTS/README_IA-0.md
+  postconditions:
+  - file_exists: OUTPUTS/README_IA-0.md
+  - contains:
+      file: OUTPUTS/README_IA-0.md
+      must_include:
+      - Objetivo
+      - Como rodar
+      - APIs
+      - Variáveis de ambiente
+      - Limitações
+- role: Review
+  input:
+  - OUTPUTS/ARCH_IA-0.md
+  - OUTPUTS/README_IA-0.md
+  prompt: PROMPTS/REVIEW.txt
+  output: OUTPUTS/REVIEW_IA-0.md
+  postconditions:
+  - file_exists: OUTPUTS/REVIEW_IA-0.md
+  - contains:
+      file: OUTPUTS/REVIEW_IA-0.md
+      must_include:
+      - Pontos fortes
+      - Riscos
+      - Gaps
+      - MUST-FIX
+      - Nota

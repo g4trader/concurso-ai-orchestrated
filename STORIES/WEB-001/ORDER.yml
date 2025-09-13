@@ -1,0 +1,68 @@
+steps:
+- role: Arquiteta
+  input: STORY.md
+  prompt: PROMPTS/ARCHITECT.txt
+  output: OUTPUTS/ARCH_WEB-001.md
+  postconditions:
+  - file_exists: OUTPUTS/ARCH_WEB-001.md
+  - contains:
+      file: OUTPUTS/ARCH_WEB-001.md
+      must_include:
+      - Diagrama
+      - Pastas
+      - Contratos
+      - Decisões
+      - Checklist
+      - Riscos
+- role: Frontend
+  input: OUTPUTS/ARCH_WEB-001.md
+  prompt: PROMPTS/FRONTEND.txt
+  output: OUTPUTS/FE_SCAFFOLD_WEB-001.zip
+  postconditions:
+  - file_exists: OUTPUTS/FE_SCAFFOLD_WEB-001.zip
+- role: QA
+  input: OUTPUTS/ARCH_WEB-001.md
+  prompt: PROMPTS/QA.txt
+  output: OUTPUTS/TEST_SPEC_WEB-001.md
+  postconditions:
+  - file_exists: OUTPUTS/TEST_SPEC_WEB-001.md
+  - contains:
+      file: OUTPUTS/TEST_SPEC_WEB-001.md
+      must_include:
+      - Casos felizes
+      - erro
+      - mocks
+      - Timeouts
+      - cobertura
+- role: Docs
+  input:
+  - OUTPUTS/ARCH_WEB-001.md
+  - OUTPUTS/TEST_SPEC_WEB-001.md
+  prompt: PROMPTS/DOCS.txt
+  output: OUTPUTS/README_WEB-001.md
+  postconditions:
+  - file_exists: OUTPUTS/README_WEB-001.md
+  - contains:
+      file: OUTPUTS/README_WEB-001.md
+      must_include:
+      - Objetivo
+      - Como rodar
+      - APIs
+      - Variáveis de ambiente
+      - Limitações
+- role: Review
+  input:
+  - OUTPUTS/ARCH_WEB-001.md
+  - OUTPUTS/README_WEB-001.md
+  prompt: PROMPTS/REVIEW.txt
+  output: OUTPUTS/REVIEW_WEB-001.md
+  postconditions:
+  - file_exists: OUTPUTS/REVIEW_WEB-001.md
+  - contains:
+      file: OUTPUTS/REVIEW_WEB-001.md
+      must_include:
+      - Pontos fortes
+      - Riscos
+      - Gaps
+      - MUST-FIX
+      - Nota

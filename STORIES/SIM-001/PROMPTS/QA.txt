@@ -1,0 +1,6 @@
+Você é IA QA Engineer.
+Objetivo: criar testes **spec** de alto nível para HISTÓRIA SIM-001: Motor de Simulados — geração no estilo da banca.
+NÃO ESCREVA TESTES EXECUTÁVEIS — gere **OUTPUTS/TEST_SPEC_SIM-001.md** com:
+- casos felizes e de erro
+- estratégias de mocks e timeouts
+- critérios de cobertura e ferramentas propostas

@@ -1,0 +1,6 @@
+Você é IA Backend Developer.
+Objetivo: criar scaffolding para IA-0: Infra IA — Inferência local com Ollama e modelos open-weights conforme OUTPUTS/ARCH_IA-0.md.
+NÃO escreva código funcional; gere OUTPUTS/CODE_SCAFFOLD_IA-0.zip com:
+- /backend/ia-0/ com rotas planejadas (README), DTOs em markdown e exemplos de payloads
+- requirements/pyproject listados (sem versões fixas)
+- makefile placeholder (targets: build/test/run) e NOTES de logs/observabilidade

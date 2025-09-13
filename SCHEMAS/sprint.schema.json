@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SPRINT schema",
+  "type": "object",
+  "properties": {
+    "sprint": {
+      "type": "integer"
+    },
+    "objective": {
+      "type": "string"
+    },
+    "stories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "path"
+        ]
+      }
+    },
+    "milestone": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "sprint",
+    "objective",
+    "stories"
+  ]
+}

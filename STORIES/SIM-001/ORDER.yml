@@ -1,0 +1,73 @@
+steps:
+- role: Arquiteta
+  input: STORY.md
+  prompt: PROMPTS/ARCHITECT.txt
+  output: OUTPUTS/ARCH_SIM-001.md
+  postconditions:
+  - file_exists: OUTPUTS/ARCH_SIM-001.md
+  - contains:
+      file: OUTPUTS/ARCH_SIM-001.md
+      must_include:
+      - Diagrama
+      - Estrutura de pastas
+      - Contratos
+      - Decisões
+      - Checklist
+- role: Data/ML
+  input: OUTPUTS/ARCH_SIM-001.md
+  prompt: PROMPTS/DATA_ML.txt
+  output: OUTPUTS/ML_SCAFFOLD_SIM-001.zip
+  postconditions:
+  - file_exists: OUTPUTS/ML_SCAFFOLD_SIM-001.zip
+- role: Backend
+  input: OUTPUTS/ARCH_SIM-001.md
+  prompt: PROMPTS/BACKEND.txt
+  output: OUTPUTS/CODE_SCAFFOLD_SIM-001.zip
+  postconditions:
+  - file_exists: OUTPUTS/CODE_SCAFFOLD_SIM-001.zip
+- role: QA
+  input: OUTPUTS/CODE_SCAFFOLD_SIM-001.zip
+  prompt: PROMPTS/QA.txt
+  output: OUTPUTS/TEST_SPEC_SIM-001.md
+  postconditions:
+  - file_exists: OUTPUTS/TEST_SPEC_SIM-001.md
+  - contains:
+      file: OUTPUTS/TEST_SPEC_SIM-001.md
+      must_include:
+      - casos felizes
+      - erros
+      - mocks
+      - timeouts
+      - cobertura
+- role: Docs
+  input:
+  - OUTPUTS/ARCH_SIM-001.md
+  - OUTPUTS/TEST_SPEC_SIM-001.md
+  prompt: PROMPTS/DOCS.txt
+  output: OUTPUTS/README_SIM-001.md
+  postconditions:
+  - file_exists: OUTPUTS/README_SIM-001.md
+  - contains:
+      file: OUTPUTS/README_SIM-001.md
+      must_include:
+      - Objetivo
+      - Como rodar
+      - APIs
+      - Variáveis de ambiente
+      - Limitações
+- role: Review
+  input:
+  - OUTPUTS/ARCH_SIM-001.md
+  - OUTPUTS/README_SIM-001.md
+  prompt: PROMPTS/REVIEW.txt
+  output: OUTPUTS/REVIEW_SIM-001.md
+  postconditions:
+  - file_exists: OUTPUTS/REVIEW_SIM-001.md
+  - contains:
+      file: OUTPUTS/REVIEW_SIM-001.md
+      must_include:
+      - Pontos fortes
+      - Riscos
+      - Gaps
+      - MUST-FIX
+      - Nota

@@ -1,0 +1,4 @@
+Você é IA Arquiteta de Software.
+Objetivo: projetar a solução da HISTÓRIA WEB-001: Protótipo Web — shell do app (Next.js).
+Entrada: STORY.md desta pasta.
+Entregue em OUTPUTS/ARCH_WEB-001.md com: Diagrama, Pastas/Arquivos, Contratos, Decisões/Trade-offs, Checklist (P/M/G), Riscos.
