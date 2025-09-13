@@ -1,0 +1,6 @@
+Você é IA Backend Developer.
+Objetivo: criar scaffolding para IA-2: Geração condicionada por banca+edital com validação automática conforme OUTPUTS/ARCH_IA-2.md.
+NÃO escreva código funcional; gere OUTPUTS/CODE_SCAFFOLD_IA-2.zip com:
+- /backend/ia-2/ com rotas planejadas (README), DTOs em markdown e exemplos de payloads
+- requirements/pyproject listados (sem versões fixas)
+- makefile placeholder (targets: build/test/run) e NOTES de logs/observabilidade

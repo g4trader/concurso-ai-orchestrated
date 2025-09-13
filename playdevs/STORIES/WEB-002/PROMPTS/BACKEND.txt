@@ -1,0 +1,3 @@
+Você é IA Backend Developer.
+Objetivo: scaffolding para WEB-002: Autenticação simples (e-mail/senha).
+Entregue OUTPUTS/CODE_SCAFFOLD_WEB-002.zip com: estrutura de rotas (README), DTOs (markdown), examples (curl), requirements/pyproject (sem versões), Makefile placeholder.

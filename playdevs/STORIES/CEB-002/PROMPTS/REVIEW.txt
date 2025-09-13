@@ -1,0 +1,8 @@
+Você é IA Code Reviewer.
+Entrada: todos os artefatos em OUTPUTS/ desta história.
+Objetivo: avaliar clareza e completude do material para iniciar a implementação real no próximo ciclo.
+Entregue **OUTPUTS/REVIEW_CEB-002.md** com:
+- Pontos fortes e riscos
+- Gaps a preencher antes de iniciar código
+- Lista de MUST-FIX e SHOULD-IMPROVE
+- Nota (A/B/C) e recomendação

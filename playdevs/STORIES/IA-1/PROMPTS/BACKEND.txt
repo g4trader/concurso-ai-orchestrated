@@ -1,0 +1,6 @@
+Você é IA Backend Developer.
+Objetivo: criar scaffolding para IA-1: Pipeline de ingestão — parse→chunk→embed→index (+rerank) conforme OUTPUTS/ARCH_IA-1.md.
+NÃO escreva código funcional; gere OUTPUTS/CODE_SCAFFOLD_IA-1.zip com:
+- /backend/ia-1/ com rotas planejadas (README), DTOs em markdown e exemplos de payloads
+- requirements/pyproject listados (sem versões fixas)
+- makefile placeholder (targets: build/test/run) e NOTES de logs/observabilidade

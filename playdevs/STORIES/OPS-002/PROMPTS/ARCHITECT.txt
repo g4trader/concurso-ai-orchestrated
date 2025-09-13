@@ -1,0 +1,4 @@
+Você é IA Arquiteta de Software.
+Objetivo: projetar a solução da HISTÓRIA OPS-002: Observabilidade básica (logs + uptime).
+Entrada: STORY.md desta pasta.
+Entregue em OUTPUTS/ARCH_OPS-002.md com: Diagrama, Pastas/Arquivos, Contratos, Decisões/Trade-offs, Checklist (P/M/G), Riscos.

@@ -1,0 +1,8 @@
+sprint: 1
+objective: Fundamentos da Coleta
+stories:
+- id: CEB-001
+  path: playdevs/STORIES/CEB-001/ORDER.yml
+- id: CEB-002
+  path: playdevs/STORIES/CEB-002/ORDER.yml
+milestone: Base inicial com PDFs + TXT + metadados

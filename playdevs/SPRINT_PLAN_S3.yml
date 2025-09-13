@@ -1,0 +1,8 @@
+sprint: 3
+objective: Camada IA — Geração e Avaliação
+stories:
+- id: IA-2
+  path: playdevs/STORIES/IA-2/ORDER.yml
+- id: IA-3
+  path: playdevs/STORIES/IA-3/ORDER.yml
+milestone: Geração condicionada com validação + avaliação offline especificadas

@@ -1,0 +1,25 @@
+steps:
+- role: Arquiteta
+  input: STORY.md
+  prompt: PROMPTS/ARCHITECT.txt
+  output: OUTPUTS/ARCH_CEB-002.md
+- role: Backend
+  input: OUTPUTS/ARCH_CEB-002.md
+  prompt: PROMPTS/BACKEND.txt
+  output: OUTPUTS/CODE_SCAFFOLD_CEB-002.zip
+- role: QA
+  input: OUTPUTS/CODE_SCAFFOLD_CEB-002.zip
+  prompt: PROMPTS/QA.txt
+  output: OUTPUTS/TEST_SPEC_CEB-002.md
+- role: Docs
+  input:
+  - OUTPUTS/ARCH_CEB-002.md
+  - OUTPUTS/TEST_SPEC_CEB-002.md
+  prompt: PROMPTS/DOCS.txt
+  output: OUTPUTS/README_CEB-002.md
+- role: Review
+  input:
+  - OUTPUTS/ARCH_CEB-002.md
+  - OUTPUTS/README_CEB-002.md
+  prompt: PROMPTS/REVIEW.txt
+  output: OUTPUTS/REVIEW_CEB-002.md

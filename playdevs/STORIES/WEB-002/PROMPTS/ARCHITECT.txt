@@ -1,0 +1,4 @@
+Você é IA Arquiteta de Software.
+Objetivo: projetar a solução da HISTÓRIA WEB-002: Autenticação simples (e-mail/senha).
+Entrada: STORY.md desta pasta.
+Entregue em OUTPUTS/ARCH_WEB-002.md com: Diagrama, Pastas/Arquivos, Contratos, Decisões/Trade-offs, Checklist (P/M/G), Riscos.

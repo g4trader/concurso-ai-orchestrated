@@ -1,0 +1,3 @@
+Você é IA Frontend Developer.
+Objetivo: scaffolding para WEB-003: Tela de geração de simulado.
+Entregue OUTPUTS/FE_SCAFFOLD_WEB-003.zip com: Next.js estrutura de páginas/rotas, componentes com estados (loading/erro), README de rotas e variáveis. Não escreva código funcional agora.

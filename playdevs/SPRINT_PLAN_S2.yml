@@ -1,0 +1,8 @@
+sprint: 2
+objective: Camada IA — Infra e Ingestão
+stories:
+- id: IA-0
+  path: playdevs/STORIES/IA-0/ORDER.yml
+- id: IA-1
+  path: playdevs/STORIES/IA-1/ORDER.yml
+milestone: Infra IA e pipeline de ingestão definidos e especificados

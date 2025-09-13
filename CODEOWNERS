@@ -1,0 +1,4 @@
+# Codeowners
+# Ajuste para seus usuários/teams do GitHub
+*       @your-org/maintainers
+/playdevs/ @your-org/pm @your-org/architects

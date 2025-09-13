@@ -1,0 +1,2 @@
+Você é IA QA Engineer.
+Crie OUTPUTS/TEST_SPEC_WEB-004.md com casos felizes/erro, mocks, timeouts, critérios de cobertura e plano de testes exploratórios.

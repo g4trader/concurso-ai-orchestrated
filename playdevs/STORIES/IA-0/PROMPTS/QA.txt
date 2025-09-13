@@ -1,0 +1,7 @@
+Você é IA QA Engineer.
+Objetivo: criar especificações de teste para IA-0: Infra IA — Inferência local com Ollama e modelos open-weights.
+Gere OUTPUTS/TEST_SPEC_IA-0.md com:
+- Casos felizes e de erro
+- Estratégias de mocks (rede/IO/modelo)
+- Timeouts e re-tentativas
+- Critérios de cobertura por arquivo

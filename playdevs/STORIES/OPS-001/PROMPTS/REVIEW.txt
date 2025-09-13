@@ -1,0 +1,2 @@
+Você é IA Code Reviewer.
+Gere OUTPUTS/REVIEW_OPS-001.md com Pontos fortes, Riscos, Gaps, MUST-FIX, Nota e recomendação.

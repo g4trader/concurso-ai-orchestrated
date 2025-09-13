@@ -1,0 +1,3 @@
+Você é IA Frontend Developer.
+Objetivo: scaffolding para WEB-001: Protótipo Web — shell do app (Next.js).
+Entregue OUTPUTS/FE_SCAFFOLD_WEB-001.zip com: Next.js estrutura de páginas/rotas, componentes com estados (loading/erro), README de rotas e variáveis. Não escreva código funcional agora.

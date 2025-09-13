@@ -1,0 +1,8 @@
+Você é IA Documentadora Técnica.
+Objetivo: documentar IA-0: Infra IA — Inferência local com Ollama e modelos open-weights.
+Leia OUTPUTS/ARCH_IA-0.md e gere OUTPUTS/README_IA-0.md com:
+1) Objetivo/Contexto
+2) Como rodar (conceitual)
+3) APIs/contratos (se houver) com exemplos
+4) Variáveis de ambiente e logs
+5) Limitações e próximos passos

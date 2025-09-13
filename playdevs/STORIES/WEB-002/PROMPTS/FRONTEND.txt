@@ -1,0 +1,3 @@
+Você é IA Frontend Developer.
+Objetivo: scaffolding para WEB-002: Autenticação simples (e-mail/senha).
+Entregue OUTPUTS/FE_SCAFFOLD_WEB-002.zip com: Next.js estrutura de páginas/rotas, componentes com estados (loading/erro), README de rotas e variáveis. Não escreva código funcional agora.

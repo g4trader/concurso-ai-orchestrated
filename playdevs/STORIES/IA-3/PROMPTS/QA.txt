@@ -1,0 +1,7 @@
+Você é IA QA Engineer.
+Objetivo: criar especificações de teste para IA-3: Avaliação offline — topic-hit rate, style match, answerability.
+Gere OUTPUTS/TEST_SPEC_IA-3.md com:
+- Casos felizes e de erro
+- Estratégias de mocks (rede/IO/modelo)
+- Timeouts e re-tentativas
+- Critérios de cobertura por arquivo

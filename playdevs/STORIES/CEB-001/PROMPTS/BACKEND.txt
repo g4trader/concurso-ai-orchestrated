@@ -1,0 +1,9 @@
+Você é IA Backend Developer.
+Objetivo: implementar HISTÓRIA CEB-001: Crawler Cebraspe — listar e baixar PDFs conforme **OUTPUTS/ARCH_CEB-001.md**.
+NÃO ESCREVA CÓDIGO NESTE PASSO — gere um pacote .zip com a árvore de arquivos e conteúdo **placeholder** legível,
+incluindo READMEs e instruções para a próxima etapa.
+Entregue **OUTPUTS/CODE_SCAFFOLD_CEB-001.zip** com:
+- Estrutura de pastas indicada na arquitetura
+- Arquivos README/NOTES descrevendo responsabilidades de cada arquivo
+- requirements/pyproject listado sem versões fixas
+- Scripts de make (make test/build) apenas como placeholders
