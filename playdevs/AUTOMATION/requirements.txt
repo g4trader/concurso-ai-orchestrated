@@ -1,0 +1,20 @@
+# Automação do Cursor IDE
+# Dependências para automação e controle do Cursor
+
+# Automação de interface
+pyautogui>=0.9.54
+pillow>=10.0.0
+opencv-python>=4.8.0
+
+# Controle de sistema
+psutil>=5.9.0
+keyboard>=0.13.5
+
+# Utilitários
+requests>=2.31.0
+colorama>=0.4.6
+
+# Desenvolvimento e testes
+pytest>=7.4.0
+black>=23.0.0
+flake8>=6.0.0

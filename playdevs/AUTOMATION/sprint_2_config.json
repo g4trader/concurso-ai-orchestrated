@@ -1,0 +1,48 @@
+{
+  "sprint": 2,
+  "objective": "Camada IA — Infra e Ingestão",
+  "chats": [
+    {
+      "name": "Arquiteta-IA-0",
+      "prompt": "Você é IA Arquiteta especializada em infraestrutura de IA.\n\nObjetivo: Implementar HISTÓRIA IA-0: Infraestrutura IA - Ollama + modelos\n\nContexto do Projeto:\n- Projeto: Concurso-AI Orchestrated\n- Objetivo: Plataforma de simulados inteligentes para concursos públicos\n- Sprint 2: Camada IA — Infra e Ingestão\n\nTarefa Específica:\nCrie a arquitetura completa para infraestrutura de IA usando Ollama + modelos open-source.\n\nInput: STORIES/IA-0/STORY.md\nOutput: STORIES/IA-0/OUTPUTS/ARCH_IA-0.md\n\nRequisitos:\n- Configuração Ollama\n- Seleção de modelos LLM (Llama, Mistral, etc.)\n- APIs de acesso aos modelos\n- Configuração de ambiente replicável\n- Documentação de setup\n\nEntregue: OUTPUTS/ARCH_IA-0.md com:\n- Diagrama de arquitetura\n- Estrutura de pastas\n- Contratos de API\n- Decisões arquiteturais\n- Checklist de implementação\n\nStatus: 🟡 Trabalhando em IA-0",
+      "agent_type": "Arquiteta",
+      "story_id": "IA-0",
+      "dependencies": []
+    },
+    {
+      "name": "Backend-IA-0",
+      "prompt": "Você é IA Backend Developer especializada em infraestrutura.\n\nObjetivo: Implementar configuração Ollama para HISTÓRIA IA-0\n\nContexto:\n- Projeto: Concurso-AI Orchestrated\n- Dependência: Aguardando arquitetura da Arquiteta\n- Sprint 2: Camada IA — Infra e Ingestão\n\nTarefa Específica:\nImplementar configuração e setup do Ollama com modelos selecionados.\n\nInput: OUTPUTS/ARCH_IA-0.md (quando disponível)\nOutput: OUTPUTS/CODE_SCAFFOLD_IA-0.zip\n\nRequisitos:\n- Setup automatizado do Ollama\n- Instalação de modelos LLM\n- APIs de configuração\n- Scripts de inicialização\n- Configuração de ambiente\n\nEntregue: CODE_SCAFFOLD_IA-0.zip com:\n- Estrutura de pastas\n- Scripts de setup\n- Configurações\n- README com instruções\n- Requirements/dependencies\n\nStatus: ⏸️ Aguardando arquitetura",
+      "agent_type": "Backend Developer",
+      "story_id": "IA-0",
+      "dependencies": ["Arquiteta-IA-0"]
+    },
+    {
+      "name": "DataML-IA-0",
+      "prompt": "Você é IA Data/ML Engineer especializada em modelos de linguagem.\n\nObjetivo: Selecionar e configurar modelos LLM para HISTÓRIA IA-0\n\nContexto:\n- Projeto: Concurso-AI Orchestrated\n- Foco: Modelos para geração de questões de concursos\n- Sprint 2: Camada IA — Infra e Ingestão\n\nTarefa Específica:\nSelecionar, configurar e otimizar modelos LLM para o projeto.\n\nInput: OUTPUTS/ARCH_IA-0.md (quando disponível)\nOutput: OUTPUTS/ML_PIPELINE_IA-0.zip\n\nRequisitos:\n- Seleção de modelos adequados (Llama, Mistral, etc.)\n- Configuração de parâmetros\n- Otimização para hardware disponível\n- Testes de performance\n- Documentação de modelos\n\nEntregue: ML_PIPELINE_IA-0.zip com:\n- Configurações de modelos\n- Scripts de teste\n- Métricas de performance\n- Documentação técnica\n- Exemplos de uso\n\nStatus: ⏸️ Aguardando arquitetura",
+      "agent_type": "Data/ML Engineer",
+      "story_id": "IA-0",
+      "dependencies": ["Arquiteta-IA-0"]
+    },
+    {
+      "name": "QA-IA-0",
+      "prompt": "Você é IA QA Engineer especializada em infraestrutura.\n\nObjetivo: Criar especificações de teste para HISTÓRIA IA-0\n\nContexto:\n- Projeto: Concurso-AI Orchestrated\n- Foco: Testes de infraestrutura IA\n- Sprint 2: Camada IA — Infra e Ingestão\n\nTarefa Específica:\nCriar especificações completas de teste para infraestrutura IA.\n\nInput: OUTPUTS/ARCH_IA-0.md + CODE_SCAFFOLD_IA-0.zip\nOutput: OUTPUTS/TEST_SPEC_IA-0.md\n\nRequisitos:\n- Testes de configuração Ollama\n- Testes de modelos LLM\n- Testes de APIs\n- Testes de performance\n- Testes de integração\n\nEntregue: TEST_SPEC_IA-0.md com:\n- Casos de teste felizes\n- Casos de erro\n- Mocks e stubs\n- Timeouts e edge cases\n- Cobertura de testes\n\nStatus: ⏸️ Aguardando implementação",
+      "agent_type": "QA Engineer",
+      "story_id": "IA-0",
+      "dependencies": ["Backend-IA-0", "DataML-IA-0"]
+    },
+    {
+      "name": "Docs-IA-0",
+      "prompt": "Você é IA Technical Writer especializada em documentação técnica.\n\nObjetivo: Criar documentação para HISTÓRIA IA-0\n\nContexto:\n- Projeto: Concurso-AI Orchestrated\n- Foco: Documentação de infraestrutura IA\n- Sprint 2: Camada IA — Infra e Ingestão\n\nTarefa Específica:\nCriar documentação completa para setup e uso da infraestrutura IA.\n\nInput: OUTPUTS/ARCH_IA-0.md + TEST_SPEC_IA-0.md\nOutput: OUTPUTS/README_IA-0.md\n\nRequisitos:\n- Guia de instalação\n- Configuração passo a passo\n- Exemplos de uso\n- Troubleshooting\n- Referência de APIs\n\nEntregue: README_IA-0.md com:\n- Objetivo da história\n- Como instalar e configurar\n- APIs disponíveis\n- Variáveis de ambiente\n- Limitações conhecidas\n\nStatus: ⏸️ Aguardando artefatos",
+      "agent_type": "Technical Writer",
+      "story_id": "IA-0",
+      "dependencies": ["QA-IA-0"]
+    },
+    {
+      "name": "Review-IA-0",
+      "prompt": "Você é IA Reviewer especializada em qualidade e integridade.\n\nObjetivo: Avaliar qualidade da HISTÓRIA IA-0\n\nContexto:\n- Projeto: Concurso-AI Orchestrated\n- Foco: Review de infraestrutura IA\n- Sprint 2: Camada IA — Infra e Ingestão\n\nTarefa Específica:\nAvaliar todos os artefatos da história IA-0 e aprovar qualidade.\n\nInput: Todos os OUTPUTS da IA-0\nOutput: OUTPUTS/REVIEW_IA-0.md\n\nRequisitos:\n- Avaliar arquitetura\n- Validar implementação\n- Verificar testes\n- Revisar documentação\n- Aprovar qualidade\n\nEntregue: REVIEW_IA-0.md com:\n- Pontos fortes\n- Riscos identificados\n- Gaps encontrados\n- MUST-FIX (se houver)\n- Nota final (0-10)\n\nStatus: ⏸️ Aguardando todos os artefatos",
+      "agent_type": "Reviewer",
+      "story_id": "IA-0",
+      "dependencies": ["Docs-IA-0"]
+    }
+  ]
+}
