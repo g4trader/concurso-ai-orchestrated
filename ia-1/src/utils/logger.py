@@ -1,5 +1,5 @@
 """
-Sistema de logging para IA-0
+Sistema de logging para IA-1
 """
 
 import logging
@@ -26,13 +26,14 @@ def setup_logging(level: str = "INFO") -> None:
         wrapper_class=structlog.stdlib.BoundLogger,
         cache_logger_on_first_use=True,
     )
-    
+
+    # Configure standard logging
     logging.basicConfig(
         format="%(message)s",
         stream=sys.stdout,
         level=getattr(logging, level.upper()),
     )
 
-def get_logger(name: Optional[str] = None) -> structlog.BoundLogger:
-    """Obter logger configurado"""
+def get_logger(name: str) -> structlog.BoundLogger:
+    """Obter logger estruturado"""
     return structlog.get_logger(name)

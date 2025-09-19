@@ -3,7 +3,7 @@ Modelos de response para IA-0
 """
 
 from pydantic import BaseModel, Field
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from datetime import datetime
 
 class QuestionResponse(BaseModel):

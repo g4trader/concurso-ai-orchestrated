@@ -4,6 +4,9 @@ Rotas da API IA-1
 
 from fastapi import APIRouter, HTTPException, UploadFile, File, BackgroundTasks
 from typing import List, Optional
+import json
+import time
+from datetime import datetime
 from src.models.request import (
     DocumentUploadRequest, QueryRequest, BatchUploadRequest,
     IndexRebuildRequest, HealthCheckRequest
@@ -20,8 +23,28 @@ from src.services.indexing_service import IndexingService
 from src.services.reranker_service import RerankerService
 from src.services.query_service import QueryService
 from src.services.health_check import HealthCheckService
+import aiofiles
+import os
 
 router = APIRouter(prefix="/api/v1", tags=["ia-1"])
+
+async def save_uploaded_file(file: UploadFile) -> str:
+    """Salva arquivo enviado e retorna o caminho"""
+    # Criar diretório temporário se não existir
+    temp_dir = "/tmp/uploads"
+    os.makedirs(temp_dir, exist_ok=True)
+    
+    # Gerar nome único para o arquivo
+    file_extension = os.path.splitext(file.filename)[1] if file.filename else ""
+    temp_filename = f"upload_{int(time.time())}{file_extension}"
+    file_path = os.path.join(temp_dir, temp_filename)
+    
+    # Salvar arquivo
+    async with aiofiles.open(file_path, 'wb') as f:
+        content = await file.read()
+        await f.write(content)
+    
+    return file_path
 
 # Dependências
 parser_service = ParserService()
