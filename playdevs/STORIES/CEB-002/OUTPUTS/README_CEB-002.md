@@ -388,3 +388,9 @@ VERBOSE=false
 - **Tesseract**: Versão 4.0+ com suporte a português
 
 
+
+
+
+
+
+

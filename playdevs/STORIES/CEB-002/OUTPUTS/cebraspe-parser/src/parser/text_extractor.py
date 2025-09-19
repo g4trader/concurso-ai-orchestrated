@@ -120,3 +120,9 @@ class TextExtractor:
         return 0.98
 
 
+
+
+
+
+
+

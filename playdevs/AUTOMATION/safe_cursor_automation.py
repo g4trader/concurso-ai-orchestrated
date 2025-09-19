@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Advanced Cursor IDE Automation
-Usa APIs do sistema operacional para controle mais preciso
+Safe Cursor IDE Automation - Versão segura sem loops
+Executa sprints de forma controlada e segura
 """
 
 import subprocess
@@ -9,7 +9,7 @@ import time
 import json
 import os
 import signal
-import threading
+import sys
 from typing import Dict, List, Optional
 from dataclasses import dataclass
 from pathlib import Path
@@ -23,32 +23,26 @@ class ProcessInfo:
     status: str
     memory_usage: float
 
-class AdvancedCursorAutomation:
-    """Automação avançada do Cursor usando APIs do sistema"""
+class SafeCursorAutomation:
+    """Automação segura do Cursor sem loops"""
     
     def __init__(self, config_path: str = None):
         self.config = self._load_config(config_path)
         self.cursor_process = None
         self.active_chats = {}
-        self.monitoring = False
-        self.monitor_thread = None
+        self.completed_agents = set()
+        self.running = False
     
     def _load_config(self, config_path: str) -> dict:
         """Carrega configuração"""
         default_config = {
             "cursor_app_name": "Cursor",
-            "cursor_bundle_id": "com.todesktop.230313mzl4w4u92",
             "project_path": "/Users/lucianoterres/Documents/GitHub/concurso-ai-orchestrated",
             "wait_times": {
-                "app_launch": 5.0,
+                "app_launch": 3.0,
                 "chat_open": 2.0,
                 "message_send": 1.0,
-                "response_wait": 10.0
-            },
-            "automation_scripts": {
-                "open_chat": "tell application \"Cursor\" to activate",
-                "send_message": "tell application \"System Events\" to keystroke \"{message}\"",
-                "press_enter": "tell application \"System Events\" to key code 36"
+                "response_wait": 5.0
             }
         }
         
@@ -68,7 +62,7 @@ class AdvancedCursorAutomation:
                         pid=proc.info['pid'],
                         name=proc.info['name'],
                         status=proc.info['status'],
-                        memory_usage=proc.info['memory_info'].rss / 1024 / 1024  # MB
+                        memory_usage=proc.info['memory_info'].rss / 1024 / 1024
                     )
             except (psutil.NoSuchProcess, psutil.AccessDenied):
                 continue
@@ -77,18 +71,16 @@ class AdvancedCursorAutomation:
     def launch_cursor(self) -> bool:
         """Lança o Cursor usando AppleScript (macOS)"""
         try:
-            # Comando para abrir o Cursor
             script = f'''
             tell application "{self.config["cursor_app_name"]}"
                 activate
-                delay 2
+                delay 1
             end tell
             '''
             
-            subprocess.run(['osascript', '-e', script], check=True)
+            subprocess.run(['osascript', '-e', script], check=True, timeout=10)
             time.sleep(self.config["wait_times"]["app_launch"])
             
-            # Verifica se o processo foi criado
             self.cursor_process = self.find_cursor_process()
             if self.cursor_process:
                 print(f"✅ Cursor lançado (PID: {self.cursor_process.pid})")
@@ -97,17 +89,17 @@ class AdvancedCursorAutomation:
                 print("❌ Cursor não foi encontrado após lançamento")
                 return False
                 
-        except subprocess.CalledProcessError as e:
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:
             print(f"❌ Erro ao lançar Cursor: {e}")
             return False
     
     def execute_applescript(self, script: str) -> bool:
-        """Executa script AppleScript"""
+        """Executa script AppleScript com timeout"""
         try:
             result = subprocess.run(['osascript', '-e', script], 
-                                  capture_output=True, text=True, check=True)
+                                  capture_output=True, text=True, check=True, timeout=10)
             return True
-        except subprocess.CalledProcessError as e:
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:
             print(f"❌ Erro no AppleScript: {e}")
             return False
     
@@ -118,7 +110,7 @@ class AdvancedCursorAutomation:
             self.execute_applescript(f'tell application "{self.config["cursor_app_name"]}" to activate')
             time.sleep(1)
             
-            # Abre novo chat usando Cmd+L (nova aba de chat no Cursor)
+            # Abre novo chat (Cmd+L para abrir chat, não nova janela)
             script = '''
             tell application "System Events"
                 keystroke "l" using command down
@@ -131,8 +123,7 @@ class AdvancedCursorAutomation:
                 # Salva referência do chat
                 self.active_chats[chat_name] = {
                     "opened_at": time.time(),
-                    "status": "active",
-                    "pid": self.cursor_process.pid if self.cursor_process else None
+                    "status": "active"
                 }
                 
                 print(f"✅ Chat '{chat_name}' aberto")
@@ -154,16 +145,16 @@ class AdvancedCursorAutomation:
             # Limpa o campo de texto
             script = '''
             tell application "System Events"
-                key code 0 using command down  -- Cmd+A
-                key code 51  -- Delete
+                key code 0 using command down
+                key code 51
             end tell
             '''
             self.execute_applescript(script)
             time.sleep(0.5)
             
-            # Digita o prompt
-            # Escapa caracteres especiais para AppleScript
-            escaped_prompt = prompt.replace('"', '\\"').replace('\n', '\\n')
+            # Digita o prompt (limitado para evitar problemas)
+            short_prompt = prompt[:500] + "..." if len(prompt) > 500 else prompt
+            escaped_prompt = short_prompt.replace('"', '\\"').replace('\n', '\\n')
             
             script = f'''
             tell application "System Events"
@@ -192,73 +183,64 @@ class AdvancedCursorAutomation:
             print(f"❌ Erro ao enviar prompt: {e}")
             return False
     
-    def monitor_cursor_status(self):
-        """Monitora status do Cursor em thread separada"""
-        while self.monitoring:
-            try:
-                if self.cursor_process:
-                    # Verifica se o processo ainda existe
-                    if not psutil.pid_exists(self.cursor_process.pid):
-                        print("⚠️ Processo do Cursor foi encerrado")
-                        self.cursor_process = None
-                        break
-                    
-                    # Atualiza informações do processo
-                    try:
-                        proc = psutil.Process(self.cursor_process.pid)
-                        self.cursor_process.memory_usage = proc.memory_info().rss / 1024 / 1024
-                        self.cursor_process.status = proc.status()
-                    except psutil.NoSuchProcess:
-                        self.cursor_process = None
-                        break
-                
-                time.sleep(5)  # Verifica a cada 5 segundos
-                
-            except Exception as e:
-                print(f"⚠️ Erro no monitoramento: {e}")
-                time.sleep(5)
+    def check_dependencies(self, agent_config: dict) -> bool:
+        """Verifica se as dependências do agente foram atendidas"""
+        dependencies = agent_config.get('dependencies', [])
+        
+        for dep in dependencies:
+            if dep not in self.completed_agents:
+                print(f"⏸️ {agent_config['agent_type']} aguardando {dep}")
+                return False
+        
+        return True
     
-    def start_monitoring(self):
-        """Inicia monitoramento do Cursor"""
-        if not self.monitoring:
-            self.monitoring = True
-            self.monitor_thread = threading.Thread(target=self.monitor_cursor_status)
-            self.monitor_thread.daemon = True
-            self.monitor_thread.start()
-            print("🔍 Monitoramento iniciado")
-    
-    def stop_monitoring(self):
-        """Para monitoramento do Cursor"""
-        if self.monitoring:
-            self.monitoring = False
-            if self.monitor_thread:
-                self.monitor_thread.join(timeout=2)
-            print("⏹️ Monitoramento parado")
-    
-    def execute_agent_workflow(self, chat_config: dict) -> bool:
-        """Executa workflow para um agente"""
-        print(f"\n🚀 Executando {chat_config['agent_type']} - {chat_config['story_id']}")
+    def execute_agent_workflow(self, agent_config: dict) -> bool:
+        """Executa workflow para um agente com verificação de dependências"""
+        agent_name = agent_config['name']
+        agent_type = agent_config['agent_type']
+        
+        print(f"\n🚀 Executando {agent_type} - {agent_config['story_id']}")
+        
+        # Verifica dependências
+        if not self.check_dependencies(agent_config):
+            return False
         
         # 1. Abre novo chat
-        if not self.open_new_chat(chat_config['name']):
+        if not self.open_new_chat(agent_name):
             return False
         
         # 2. Envia prompt
-        if not self.send_prompt(chat_config['prompt'], chat_config['name']):
+        if not self.send_prompt(agent_config['prompt'], agent_name):
             return False
         
-        # 3. Aguarda resposta
-        print(f"⏳ Aguardando resposta de {chat_config['agent_type']}...")
-        time.sleep(self.config["wait_times"]["response_wait"])
+        # 3. Aguarda resposta (com timeout)
+        print(f"⏳ Aguardando resposta de {agent_type}...")
+        print(f"💡 Complete sua tarefa no chat '{agent_name}' e pressione Ctrl+C para continuar")
         
-        # 4. Atualiza status
-        self.active_chats[chat_config['name']]["status"] = "completed"
+        try:
+            # Aguarda input do usuário com timeout
+            import select
+            import sys
+            
+            if sys.stdin in select.select([sys.stdin], [], [], 30)[0]:
+                input()  # Limpa o buffer
+            else:
+                print("⏰ Timeout - continuando para próximo agente")
+                
+        except KeyboardInterrupt:
+            print(f"\n⏹️ Continuando para próximo agente...")
+        except Exception:
+            print("⏰ Continuando automaticamente...")
         
-        print(f"✅ {chat_config['agent_type']} concluído")
+        # 4. Marca como concluído
+        self.completed_agents.add(agent_name)
+        self.active_chats[agent_name]["status"] = "completed"
+        
+        print(f"✅ {agent_type} concluído")
         return True
     
     def execute_sprint(self, sprint_number: int) -> bool:
-        """Executa sprint completa"""
+        """Executa sprint completa de forma segura"""
         print(f"\n🎯 Executando Sprint {sprint_number}")
         
         # Carrega configuração da sprint
@@ -266,21 +248,41 @@ class AdvancedCursorAutomation:
         if not sprint_config:
             return False
         
-        # Inicia monitoramento
-        self.start_monitoring()
+        print(f"📋 Sprint: {sprint_config.get('objective', 'N/A')}")
+        print(f"👥 Agentes: {len(sprint_config['chats'])}")
+        
+        self.running = True
         
         try:
-            # Executa cada agente
-            for chat_config in sprint_config["chats"]:
-                if not self.execute_agent_workflow(chat_config):
-                    print(f"❌ Falha em {chat_config['agent_type']}")
-                    return False
+            # Executa cada agente em ordem
+            for i, agent_config in enumerate(sprint_config["chats"], 1):
+                if not self.running:
+                    break
+                    
+                print(f"\n{'='*50}")
+                print(f"📊 Progresso: {i}/{len(sprint_config['chats'])}")
+                print(f"{'='*50}")
+                
+                if not self.execute_agent_workflow(agent_config):
+                    print(f"⏸️ {agent_config['agent_type']} pulado (dependências não atendidas)")
+                    continue
             
-            print(f"✅ Sprint {sprint_number} executada com sucesso")
-            return True
+            if self.running:
+                print(f"\n🎉 Sprint {sprint_number} executada com sucesso!")
+                print(f"✅ Agentes concluídos: {len(self.completed_agents)}")
+                return True
+            else:
+                print(f"\n⏹️ Sprint {sprint_number} interrompida")
+                return False
             
-        finally:
-            self.stop_monitoring()
+        except KeyboardInterrupt:
+            print(f"\n⏹️ Sprint {sprint_number} interrompida pelo usuário")
+            self.running = False
+            return False
+        except Exception as e:
+            print(f"\n❌ Erro na Sprint {sprint_number}: {e}")
+            self.running = False
+            return False
     
     def _load_sprint_config(self, sprint_number: int) -> Optional[dict]:
         """Carrega configuração da sprint"""
@@ -309,19 +311,38 @@ class AdvancedCursorAutomation:
             }
         return {"status": "not_running"}
     
+    def stop(self):
+        """Para a execução"""
+        self.running = False
+        print("⏹️ Parando automação...")
+    
     def cleanup(self):
         """Limpa recursos"""
         print("\n🧹 Limpando recursos...")
-        self.stop_monitoring()
         self.active_chats.clear()
+        self.completed_agents.clear()
+        self.running = False
         print("✅ Limpeza concluída")
+
+def signal_handler(signum, frame):
+    """Handler para sinais de interrupção"""
+    print("\n⏹️ Recebido sinal de interrupção")
+    if 'automation' in globals():
+        automation.stop()
+    sys.exit(0)
 
 def main():
     """Função principal"""
-    automation = AdvancedCursorAutomation()
+    global automation
+    
+    # Configura handlers de sinal
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+    
+    automation = SafeCursorAutomation()
     
     try:
-        print("🤖 Automação Avançada do Cursor")
+        print("🤖 Automação Segura do Cursor")
         print("=" * 40)
         
         # Verifica se o Cursor está rodando
@@ -334,52 +355,9 @@ def main():
             print(f"✅ Cursor já está rodando (PID: {cursor_info['pid']})")
             automation.cursor_process = automation.find_cursor_process()
         
-        # Menu de opções
-        while True:
-            print("\n📋 Opções:")
-            print("1. Executar Sprint 2")
-            print("2. Executar Sprint 3")
-            print("3. Executar Sprint 4")
-            print("4. Teste manual")
-            print("5. Status do Cursor")
-            print("6. Sair")
-            
-            try:
-                choice = input("\nEscolha uma opção: ").strip()
-                
-                if choice == "1":
-                    print("🚀 Iniciando Sprint 2...")
-                    automation.execute_sprint(2)
-                    print("✅ Sprint 2 concluída. Retornando ao menu...")
-                elif choice == "2":
-                    print("🚀 Iniciando Sprint 3...")
-                    automation.execute_sprint(3)
-                    print("✅ Sprint 3 concluída. Retornando ao menu...")
-                elif choice == "3":
-                    print("🚀 Iniciando Sprint 4...")
-                    automation.execute_sprint(4)
-                    print("✅ Sprint 4 concluída. Retornando ao menu...")
-                elif choice == "4":
-                    # Teste manual
-                    print("🧪 Executando teste manual...")
-                    automation.open_new_chat("Teste")
-                    automation.send_prompt("Este é um teste de automação avançada!")
-                    print("✅ Teste concluído. Retornando ao menu...")
-                elif choice == "5":
-                    info = automation.get_cursor_info()
-                    print(f"📊 Status do Cursor: {info}")
-                elif choice == "6":
-                    print("👋 Encerrando automação...")
-                    break
-                else:
-                    print("❌ Opção inválida")
-                    
-            except KeyboardInterrupt:
-                print("\n⏹️ Operação interrompida pelo usuário")
-                continue
-            except Exception as e:
-                print(f"❌ Erro na operação: {e}")
-                continue
+        # Executa Sprint 2
+        print("\n🎯 Iniciando Sprint 2...")
+        automation.execute_sprint(2)
     
     except KeyboardInterrupt:
         print("\n⏹️ Interrompido pelo usuário")
@@ -390,3 +368,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+

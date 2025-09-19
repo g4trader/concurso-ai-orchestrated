@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Advanced Cursor IDE Automation
-Usa APIs do sistema operacional para controle mais preciso
+Fixed Cursor IDE Automation Script
+Corrige o problema de abertura de chats vs. edição de arquivos
 """
 
 import subprocess
@@ -23,8 +23,8 @@ class ProcessInfo:
     status: str
     memory_usage: float
 
-class AdvancedCursorAutomation:
-    """Automação avançada do Cursor usando APIs do sistema"""
+class FixedCursorAutomation:
+    """Automação corrigida do Cursor com foco em abertura de chats"""
     
     def __init__(self, config_path: str = None):
         self.config = self._load_config(config_path)
@@ -41,9 +41,10 @@ class AdvancedCursorAutomation:
             "project_path": "/Users/lucianoterres/Documents/GitHub/concurso-ai-orchestrated",
             "wait_times": {
                 "app_launch": 5.0,
-                "chat_open": 2.0,
+                "chat_open": 3.0,  # Aumentado para garantir abertura
                 "message_send": 1.0,
-                "response_wait": 10.0
+                "response_wait": 10.0,
+                "ui_focus": 2.0    # Tempo para foco na UI
             },
             "automation_scripts": {
                 "open_chat": "tell application \"Cursor\" to activate",
@@ -111,33 +112,61 @@ class AdvancedCursorAutomation:
             print(f"❌ Erro no AppleScript: {e}")
             return False
     
-    def open_new_chat(self, chat_name: str) -> bool:
-        """Abre novo chat usando AppleScript"""
+    def ensure_cursor_focus(self) -> bool:
+        """Garante que o Cursor está em foco"""
         try:
-            # Ativa o Cursor
-            self.execute_applescript(f'tell application "{self.config["cursor_app_name"]}" to activate')
-            time.sleep(1)
+            # Ativa o Cursor e aguarda
+            script = f'''
+            tell application "{self.config["cursor_app_name"]}"
+                activate
+                delay 1
+            end tell
+            '''
             
-            # Abre novo chat usando Cmd+L (nova aba de chat no Cursor)
+            if self.execute_applescript(script):
+                time.sleep(self.config["wait_times"]["ui_focus"])
+                return True
+            return False
+        except Exception as e:
+            print(f"❌ Erro ao focar Cursor: {e}")
+            return False
+    
+    def open_new_chat(self, chat_name: str) -> bool:
+        """Abre novo chat usando AppleScript - VERSÃO CORRIGIDA"""
+        try:
+            print(f"🚀 Abrindo chat '{chat_name}'...")
+            
+            # 1. Garante que o Cursor está em foco
+            if not self.ensure_cursor_focus():
+                print("❌ Falha ao focar Cursor")
+                return False
+            
+            # 2. Abre novo chat usando Cmd+L (nova aba de chat no Cursor)
+            # CORREÇÃO: Usar Cmd+L que é o atalho correto para nova aba de chat no Cursor
             script = '''
             tell application "System Events"
                 keystroke "l" using command down
+                delay 1
             end tell
             '''
             
             if self.execute_applescript(script):
                 time.sleep(self.config["wait_times"]["chat_open"])
                 
-                # Salva referência do chat
+                # 3. Verifica se o chat foi aberto (opcional - pode ser implementado)
+                # Por enquanto, assume que foi aberto com sucesso
+                
+                # 4. Salva referência do chat
                 self.active_chats[chat_name] = {
                     "opened_at": time.time(),
                     "status": "active",
                     "pid": self.cursor_process.pid if self.cursor_process else None
                 }
                 
-                print(f"✅ Chat '{chat_name}' aberto")
+                print(f"✅ Chat '{chat_name}' aberto com sucesso")
                 return True
             else:
+                print(f"❌ Falha ao executar script de abertura de chat")
                 return False
                 
         except Exception as e:
@@ -145,39 +174,45 @@ class AdvancedCursorAutomation:
             return False
     
     def send_prompt(self, prompt: str, chat_name: str = None) -> bool:
-        """Envia prompt usando AppleScript"""
+        """Envia prompt usando AppleScript - VERSÃO CORRIGIDA"""
         try:
-            # Ativa o Cursor
-            self.execute_applescript(f'tell application "{self.config["cursor_app_name"]}" to activate')
-            time.sleep(0.5)
+            print(f"📤 Enviando prompt para '{chat_name or 'chat ativo'}'...")
             
-            # Limpa o campo de texto
+            # 1. Garante que o Cursor está em foco
+            if not self.ensure_cursor_focus():
+                print("❌ Falha ao focar Cursor")
+                return False
+            
+            # 2. Limpa o campo de texto
             script = '''
             tell application "System Events"
-                key code 0 using command down  -- Cmd+A
-                key code 51  -- Delete
+                key code 0 using command down  -- Cmd+A (selecionar tudo)
+                key code 51                    -- Delete
+                delay 0.5
             end tell
             '''
             self.execute_applescript(script)
             time.sleep(0.5)
             
-            # Digita o prompt
+            # 3. Digita o prompt
             # Escapa caracteres especiais para AppleScript
             escaped_prompt = prompt.replace('"', '\\"').replace('\n', '\\n')
             
             script = f'''
             tell application "System Events"
                 keystroke "{escaped_prompt}"
+                delay 1
             end tell
             '''
             
             if self.execute_applescript(script):
                 time.sleep(1)
                 
-                # Envia a mensagem (Cmd+Enter)
+                # 4. Envia a mensagem (Cmd+Enter)
                 send_script = '''
                 tell application "System Events"
                     key code 36 using command down
+                    delay 0.5
                 end tell
                 '''
                 
@@ -186,6 +221,7 @@ class AdvancedCursorAutomation:
                     print(f"✅ Prompt enviado para '{chat_name or 'chat ativo'}'")
                     return True
             
+            print(f"❌ Falha ao enviar prompt")
             return False
             
         except Exception as e:
@@ -236,20 +272,27 @@ class AdvancedCursorAutomation:
             print("⏹️ Monitoramento parado")
     
     def execute_agent_workflow(self, chat_config: dict) -> bool:
-        """Executa workflow para um agente"""
-        print(f"\n🚀 Executando {chat_config['agent_type']} - {chat_config['story_id']}")
+        """Executa workflow para um agente - VERSÃO CORRIGIDA"""
+        print(f"\n🚀 Executando {chat_config['agent_type']} – {chat_config['story_id']}")
         
         # 1. Abre novo chat
         if not self.open_new_chat(chat_config['name']):
+            print(f"❌ Falha ao abrir chat para {chat_config['agent_type']}")
             return False
         
         # 2. Envia prompt
         if not self.send_prompt(chat_config['prompt'], chat_config['name']):
+            print(f"❌ Falha ao enviar prompt para {chat_config['agent_type']}")
             return False
         
         # 3. Aguarda resposta
         print(f"⏳ Aguardando resposta de {chat_config['agent_type']}...")
-        time.sleep(self.config["wait_times"]["response_wait"])
+        print("💡 Complete sua tarefa no chat e pressione Ctrl+C para continuar")
+        
+        try:
+            time.sleep(self.config["wait_times"]["response_wait"])
+        except KeyboardInterrupt:
+            print(f"⏭️ Continuando para próximo agente...")
         
         # 4. Atualiza status
         self.active_chats[chat_config['name']]["status"] = "completed"
@@ -258,7 +301,7 @@ class AdvancedCursorAutomation:
         return True
     
     def execute_sprint(self, sprint_number: int) -> bool:
-        """Executa sprint completa"""
+        """Executa sprint completa - VERSÃO CORRIGIDA"""
         print(f"\n🎯 Executando Sprint {sprint_number}")
         
         # Carrega configuração da sprint
@@ -271,7 +314,11 @@ class AdvancedCursorAutomation:
         
         try:
             # Executa cada agente
-            for chat_config in sprint_config["chats"]:
+            total_agents = len(sprint_config["chats"])
+            for i, chat_config in enumerate(sprint_config["chats"], 1):
+                print(f"\n📊 Progresso: {i}/{total_agents}")
+                print("─" * 50)
+                
                 if not self.execute_agent_workflow(chat_config):
                     print(f"❌ Falha em {chat_config['agent_type']}")
                     return False
@@ -317,12 +364,12 @@ class AdvancedCursorAutomation:
         print("✅ Limpeza concluída")
 
 def main():
-    """Função principal"""
-    automation = AdvancedCursorAutomation()
+    """Função principal - VERSÃO CORRIGIDA"""
+    automation = FixedCursorAutomation()
     
     try:
-        print("🤖 Automação Avançada do Cursor")
-        print("=" * 40)
+        print("🤖 Automação Corrigida do Cursor")
+        print("=" * 50)
         
         # Verifica se o Cursor está rodando
         cursor_info = automation.get_cursor_info()
@@ -337,10 +384,10 @@ def main():
         # Menu de opções
         while True:
             print("\n📋 Opções:")
-            print("1. Executar Sprint 2")
+            print("1. Executar Sprint 2 (Corrigida)")
             print("2. Executar Sprint 3")
             print("3. Executar Sprint 4")
-            print("4. Teste manual")
+            print("4. Teste manual de abertura de chat")
             print("5. Status do Cursor")
             print("6. Sair")
             
@@ -348,7 +395,7 @@ def main():
                 choice = input("\nEscolha uma opção: ").strip()
                 
                 if choice == "1":
-                    print("🚀 Iniciando Sprint 2...")
+                    print("🚀 Iniciando Sprint 2 (versão corrigida)...")
                     automation.execute_sprint(2)
                     print("✅ Sprint 2 concluída. Retornando ao menu...")
                 elif choice == "2":
@@ -361,9 +408,9 @@ def main():
                     print("✅ Sprint 4 concluída. Retornando ao menu...")
                 elif choice == "4":
                     # Teste manual
-                    print("🧪 Executando teste manual...")
-                    automation.open_new_chat("Teste")
-                    automation.send_prompt("Este é um teste de automação avançada!")
+                    print("🧪 Executando teste manual de abertura de chat...")
+                    automation.open_new_chat("Teste-Chat")
+                    automation.send_prompt("Este é um teste de automação corrigida!")
                     print("✅ Teste concluído. Retornando ao menu...")
                 elif choice == "5":
                     info = automation.get_cursor_info()

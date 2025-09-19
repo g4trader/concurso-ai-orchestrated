@@ -88,8 +88,8 @@ class CursorAutomation:
     def open_new_chat(self, chat_name: str) -> bool:
         """Abre um novo chat no Cursor"""
         try:
-            # Atalho para novo chat
-            pyautogui.hotkey('cmd', 'shift', 'n')
+            # Atalho para novo chat (Cmd+L para nova aba de chat no Cursor)
+            pyautogui.hotkey('cmd', 'l')
             time.sleep(self.config.wait_times["chat_open"])
             
             # Salva referência do chat

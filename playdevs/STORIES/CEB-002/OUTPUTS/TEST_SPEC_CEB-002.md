@@ -366,3 +366,9 @@ tests/
 - ✅ Escalabilidade para lotes grandes
 
 
+
+
+
+
+
+
