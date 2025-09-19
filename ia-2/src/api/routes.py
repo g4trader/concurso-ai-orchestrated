@@ -4,6 +4,8 @@ Rotas da API IA-2
 
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from typing import List, Optional
+import time
+from datetime import datetime
 from src.models.request import (
     QuestionGenerationRequest, BatchGenerationRequest, ValidationRequest,
     HealthCheckRequest, MetricsRequest
