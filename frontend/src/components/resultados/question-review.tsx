@@ -25,7 +25,7 @@ export function QuestionReview() {
             Questão 2 - Correta ✅
           </p>
           <p className="text-sm text-gray-600 mb-2">
-            Quem escreveu "Os Lusíadas"?
+            Quem escreveu &quot;Os Lusíadas&quot;?
           </p>
           <p className="text-sm">
             <span className="font-medium">Sua resposta:</span> Luís de Camões ✅

@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useReducer, useEffect } from 'react'
+import { createContext, useContext, useReducer } from 'react'
 import { User, LoginRequest, LoginResponse } from '@/types/auth'
 
 interface AuthState {

@@ -13,12 +13,12 @@ const nextConfig = {
   },
   
   // Configurações de produção
-  output: 'standalone',
+  // output: 'standalone', // Removido para compatibilidade com Vercel
   
   // Configurações de build
-  experimental: {
-    optimizeCss: true,
-  },
+  // experimental: {
+  //   optimizeCss: true, // Removido para compatibilidade
+  // },
   
   // Configurações de compressão
   compress: true,
