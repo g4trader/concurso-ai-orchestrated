@@ -9,14 +9,14 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/use-auth'
 
-interface DashboardStats {
-  total_simulados: number
-  average_score: number
-  average_time_spent: number
-  ranking_position: number
-  recent_simulados: any[]
-  progress_data: { [key: string]: number }
-}
+// interface DashboardStats {
+//   total_simulados: number
+//   average_score: number
+//   average_time_spent: number
+//   ranking_position: number
+//   recent_simulados: any[]
+//   progress_data: { [key: string]: number }
+// }
 
 export default function DashboardPage() {
   const { state } = useAuth()
@@ -54,7 +54,7 @@ export default function DashboardPage() {
         } else {
           setError('Erro ao carregar dados do dashboard')
         }
-      } catch (err) {
+      } catch {
         setError('Erro de conexão')
       } finally {
         setIsLoading(false)
