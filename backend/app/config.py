@@ -4,8 +4,8 @@ from typing import Optional
 
 class Settings(BaseSettings):
     # Database
-    database_url: str = "postgresql://user:password@localhost:5432/concurso_ai"
-    database_url_test: str = "postgresql://user:password@localhost:5432/concurso_ai_test"
+    database_url: str = "sqlite:///./concurso_ai.db"
+    database_url_test: str = "sqlite:///./concurso_ai_test.db"
     
     # Security
     secret_key: str = "your-secret-key-here-change-in-production"

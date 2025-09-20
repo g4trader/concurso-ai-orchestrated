@@ -37,80 +37,7 @@ export default function SimuladoPage() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Mock data para demonstração
-  const mockSimulado: Simulado = {
-    id: params.id as string,
-    title: 'Simulado CESPE - Direito Constitucional',
-    timeLimit: 60, // 60 minutos
-    totalQuestions: 5,
-    questions: [
-      {
-        id: '1',
-        text: 'A respeito dos direitos fundamentais, assinale a opção correta.',
-        options: [
-          'Os direitos fundamentais são absolutos e não admitem restrições.',
-          'Os direitos fundamentais podem ser restringidos por lei, desde que respeitados os princípios da proporcionalidade e razoabilidade.',
-          'Os direitos fundamentais só podem ser restringidos em caso de estado de sítio.',
-          'Os direitos fundamentais não se aplicam às relações privadas.'
-        ],
-        correctAnswer: 1,
-        explanation: 'Os direitos fundamentais podem ser restringidos por lei, desde que respeitados os princípios da proporcionalidade e razoabilidade.',
-        subject: 'Direito Constitucional'
-      },
-      {
-        id: '2',
-        text: 'Sobre o controle de constitucionalidade no Brasil, é correto afirmar:',
-        options: [
-          'O controle de constitucionalidade é exercido apenas pelo Supremo Tribunal Federal.',
-          'O controle de constitucionalidade pode ser exercido por qualquer juiz ou tribunal.',
-          'O controle de constitucionalidade é exercido apenas pelo Poder Legislativo.',
-          'O controle de constitucionalidade não existe no ordenamento jurídico brasileiro.'
-        ],
-        correctAnswer: 1,
-        explanation: 'O controle de constitucionalidade pode ser exercido por qualquer juiz ou tribunal, sendo o STF o guardião da Constituição.',
-        subject: 'Direito Constitucional'
-      },
-      {
-        id: '3',
-        text: 'A respeito do Poder Judiciário, assinale a opção correta.',
-        options: [
-          'O Poder Judiciário é composto apenas pelo Supremo Tribunal Federal.',
-          'O Poder Judiciário é composto por tribunais e juízes, sendo o STF o órgão de cúpula.',
-          'O Poder Judiciário não tem autonomia administrativa.',
-          'O Poder Judiciário é subordinado ao Poder Executivo.'
-        ],
-        correctAnswer: 1,
-        explanation: 'O Poder Judiciário é composto por tribunais e juízes, sendo o STF o órgão de cúpula do sistema judiciário.',
-        subject: 'Direito Constitucional'
-      },
-      {
-        id: '4',
-        text: 'Sobre os princípios fundamentais da República Federativa do Brasil, é correto afirmar:',
-        options: [
-          'A República Federativa do Brasil é formada pela união indissolúvel dos Estados e Municípios.',
-          'A República Federativa do Brasil é formada pela união indissolúvel dos Estados, Municípios e Distrito Federal.',
-          'A República Federativa do Brasil é formada pela união dos Estados, que podem se separar.',
-          'A República Federativa do Brasil não é uma federação.'
-        ],
-        correctAnswer: 1,
-        explanation: 'A República Federativa do Brasil é formada pela união indissolúvel dos Estados, Municípios e Distrito Federal.',
-        subject: 'Direito Constitucional'
-      },
-      {
-        id: '5',
-        text: 'A respeito da organização do Estado, assinale a opção correta.',
-        options: [
-          'O Brasil é um Estado unitário.',
-          'O Brasil é uma federação com autonomia dos entes federativos.',
-          'O Brasil é uma confederação.',
-          'O Brasil não tem forma de Estado definida.'
-        ],
-        correctAnswer: 1,
-        explanation: 'O Brasil é uma federação com autonomia dos entes federativos (União, Estados, Municípios e Distrito Federal).',
-        subject: 'Direito Constitucional'
-      }
-    ]
-  }
+  // Sem mais dados mock - apenas dados reais da API
 
   const handleSubmit = useCallback(async () => {
     setIsSubmitted(true)
@@ -118,42 +45,32 @@ export default function SimuladoPage() {
     try {
       const { apiClient } = await import('@/lib/api')
       
-      // Submeter simulado via API real
+      // Submeter simulado via API real - SEM FALLBACKS
       const response = await apiClient.submitSimulado(
         simulado!.id,
         answers,
-        simulado!.timeLimit * 60 - timeRemaining
+        simulado!.time_limit * 60 - timeRemaining
       )
       
       if (response.data) {
         // Redirecionar para resultados
         router.push(`/resultados/${simulado!.id}`)
       } else {
-        // Fallback para localStorage se API falhar
-        const simuladoData = {
-          id: simulado!.id,
-          answers,
-          timeSpent: simulado!.timeLimit * 60 - timeRemaining,
-          submittedAt: new Date().toISOString()
-        }
-        localStorage.setItem(`simulado_${simulado!.id}`, JSON.stringify(simuladoData))
-        router.push(`/resultados/${simulado!.id}`)
+        // ERRO: Falha ao submeter simulado
+        console.error('Erro ao submeter simulado:', response.error)
+        alert('Erro ao submeter simulado. Tente novamente.')
+        setIsSubmitted(false)
       }
     } catch (error) {
-      // Fallback para localStorage se API falhar
-      const simuladoData = {
-        id: simulado!.id,
-        answers,
-        timeSpent: simulado!.timeLimit * 60 - timeRemaining,
-        submittedAt: new Date().toISOString()
-      }
-      localStorage.setItem(`simulado_${simulado!.id}`, JSON.stringify(simuladoData))
-      router.push(`/resultados/${simulado!.id}`)
+      // ERRO: Falha na conexão
+      console.error('Erro de conexão ao submeter simulado:', error)
+      alert('Erro de conexão. Verifique se o backend está funcionando.')
+      setIsSubmitted(false)
     }
   }, [simulado, answers, timeRemaining, router])
 
   useEffect(() => {
-    // Carregar simulado real da API
+    // Carregar simulado real da API - SEM FALLBACKS MOCK
     const loadSimulado = async () => {
       setIsLoading(true)
       
@@ -165,14 +82,14 @@ export default function SimuladoPage() {
           setSimulado(response.data)
           setTimeRemaining(response.data.time_limit * 60) // Converter para segundos
         } else {
-          // Fallback para dados mock se API falhar
-          setSimulado(mockSimulado)
-          setTimeRemaining(mockSimulado.timeLimit * 60)
+          // ERRO: Simulado não encontrado
+          console.error('Simulado não encontrado:', response.error)
+          setSimulado(null)
         }
       } catch (error) {
-        // Fallback para dados mock se API falhar
-        setSimulado(mockSimulado)
-        setTimeRemaining(mockSimulado.timeLimit * 60)
+        // ERRO: Falha na conexão com API
+        console.error('Erro ao carregar simulado:', error)
+        setSimulado(null)
       }
       
       setIsLoading(false)
