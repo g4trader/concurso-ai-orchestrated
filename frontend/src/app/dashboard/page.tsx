@@ -1,18 +1,100 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import { AuthGuard } from '@/components/auth/auth-guard'
 import { StatsCard } from '@/components/dashboard/stats-card'
 import { RecentSimulados } from '@/components/dashboard/recent-simulados'
 import { ProgressChart } from '@/components/dashboard/progress-chart'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { useAuth } from '@/hooks/use-auth'
+
+interface DashboardStats {
+  total_simulados: number
+  average_score: number
+  average_time_spent: number
+  ranking_position: number
+  recent_simulados: any[]
+  progress_data: { [key: string]: number }
+}
 
 export default function DashboardPage() {
+  const { state } = useAuth()
+  const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const loadDashboardData = async () => {
+      if (!state.token) return
+      
+      setIsLoading(true)
+      setError(null)
+      
+      try {
+        const response = await fetch('http://localhost:8000/dashboard/stats', {
+          headers: {
+            'Authorization': `Bearer ${state.token}`
+          }
+        })
+        
+        if (response.ok) {
+          const data = await response.json()
+          setStats(data)
+        } else {
+          setError('Erro ao carregar dados do dashboard')
+        }
+      } catch (error) {
+        setError('Erro de conexão')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadDashboardData()
+  }, [state.token])
+
+  if (isLoading) {
+    return (
+      <AuthGuard>
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">Carregando Dashboard...</h1>
+            <p>Buscando seus dados. Aguarde um momento.</p>
+          </div>
+        </div>
+      </AuthGuard>
+    )
+  }
+
+  if (error) {
+    return (
+      <AuthGuard>
+        <div className="container mx-auto px-4 py-8">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">Erro no Dashboard</h1>
+            <p className="text-red-600 mb-4">{error}</p>
+            <Button onClick={() => window.location.reload()}>
+              Tentar Novamente
+            </Button>
+          </div>
+        </div>
+      </AuthGuard>
+    )
+  }
+
   return (
     <AuthGuard>
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Dashboard
-          </h1>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Dashboard
+            </h1>
+            <p className="text-gray-600 mt-1">
+              Bem-vindo, {state.user?.name || state.user?.email}!
+            </p>
+          </div>
           <div className="flex gap-3">
             <Link href="/gerador-simulado">
               <Button className="bg-primary-600 hover:bg-primary-700">
@@ -30,26 +112,26 @@ export default function DashboardPage() {
         <div className="grid md:grid-cols-4 gap-6 mb-8">
           <StatsCard
             title="Simulados Realizados"
-            value="12"
-            change="+2 esta semana"
+            value={stats?.total_simulados?.toString() || "0"}
+            change="Dados em tempo real"
             icon="📊"
           />
           <StatsCard
             title="Taxa de Acerto"
-            value="78%"
-            change="+5% este mês"
+            value={`${stats?.average_score?.toFixed(1) || "0"}%`}
+            change="Média geral"
             icon="🎯"
           />
           <StatsCard
             title="Tempo Médio"
-            value="45min"
-            change="-3min por simulado"
+            value={`${Math.round((stats?.average_time_spent || 0) / 60)}min`}
+            change="Por simulado"
             icon="⏱️"
           />
           <StatsCard
             title="Ranking"
-            value="#15"
-            change="+3 posições"
+            value={`#${stats?.ranking_position || "N/A"}`}
+            change="Posição atual"
             icon="🏆"
           />
         </div>

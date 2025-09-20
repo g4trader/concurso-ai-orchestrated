@@ -49,7 +49,8 @@ export default function SimuladoPage() {
       const response = await apiClient.submitSimulado(
         simulado!.id,
         answers,
-        simulado!.time_limit * 60 - timeRemaining
+        simulado!.time_limit * 60 - timeRemaining,
+        simulado!.questions
       )
       
       if (response.data) {

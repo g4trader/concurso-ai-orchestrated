@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useReducer } from 'react'
+import { createContext, useContext, useReducer, useEffect } from 'react'
 import { User, LoginRequest, LoginResponse } from '@/types/auth'
 
 interface AuthState {
@@ -67,61 +67,82 @@ const AuthContext = createContext<{
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(authReducer, initialState)
 
+  // Carregar usuário do localStorage na inicialização
+  useEffect(() => {
+    const token = localStorage.getItem('auth_token')
+    const userData = localStorage.getItem('user_data')
+    
+    if (token && userData) {
+      try {
+        const user = JSON.parse(userData)
+        dispatch({ type: 'LOAD_USER', payload: user })
+      } catch (error) {
+        // Limpar dados inválidos
+        localStorage.removeItem('auth_token')
+        localStorage.removeItem('user_data')
+      }
+    }
+  }, [])
+
   const login = async (credentials: LoginRequest) => {
     dispatch({ type: 'LOGIN_START' })
     
     try {
-      // Credenciais padrão para demonstração
-      const DEFAULT_CREDENTIALS = {
-        email: 'admin@concursoai.com',
-        password: 'admin123'
-      }
+      // Chamar API real do backend
+      const formData = new FormData()
+      formData.append('username', credentials.email)
+      formData.append('password', credentials.password)
 
-      // Verificar credenciais localmente (fallback)
-      if (credentials.email === DEFAULT_CREDENTIALS.email && credentials.password === DEFAULT_CREDENTIALS.password) {
-        const user = {
-          id: '1',
-          name: 'Administrador',
-          email: 'admin@concursoai.com',
-          createdAt: new Date().toISOString(),
-          lastLogin: new Date().toISOString()
-        }
-
-        const data: LoginResponse = {
-          user,
-          token: 'demo-token-12345',
-          expiresIn: 3600
-        }
-
-        dispatch({ type: 'LOGIN_SUCCESS', payload: data })
-        return
-      }
-
-      // Tentar chamada da API
-      try {
-        const response = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(credentials),
+      const response = await fetch('http://localhost:8000/auth/login', {
+        method: 'POST',
+        body: formData,
+      })
+      
+      if (response.ok) {
+        const tokenData = await response.json()
+        
+        // Buscar dados do usuário
+        const userResponse = await fetch('http://localhost:8000/auth/me', {
+          headers: {
+            'Authorization': `Bearer ${tokenData.access_token}`
+          }
         })
         
-        if (response.ok) {
-          const data: LoginResponse = await response.json()
+        if (userResponse.ok) {
+          const userData = await userResponse.json()
+          
+          const data: LoginResponse = {
+            user: {
+              id: userData.id.toString(),
+              name: userData.name || userData.email,
+              email: userData.email,
+              createdAt: userData.created_at,
+              lastLogin: new Date().toISOString()
+            },
+            token: tokenData.access_token,
+            expiresIn: 3600
+          }
+
+          // Salvar token no localStorage
+          localStorage.setItem('auth_token', tokenData.access_token)
+          localStorage.setItem('user_data', JSON.stringify(data.user))
+          
           dispatch({ type: 'LOGIN_SUCCESS', payload: data })
           return
         }
-      } catch {
-        console.log('API não disponível, usando autenticação local')
       }
 
       // Se chegou até aqui, credenciais inválidas
-      throw new Error('Credenciais inválidas')
+      const errorData = await response.json().catch(() => ({}))
+      throw new Error(errorData.detail || 'Credenciais inválidas')
     } catch (error) {
-      dispatch({ type: 'LOGIN_ERROR', payload: error instanceof Error ? error.message : 'Erro desconhecido' })
+      dispatch({ type: 'LOGIN_ERROR', payload: error instanceof Error ? error.message : 'Erro de conexão' })
     }
   }
 
   const logout = () => {
+    localStorage.removeItem('auth_token')
+    localStorage.removeItem('user_data')
     dispatch({ type: 'LOGOUT' })
   }
 
