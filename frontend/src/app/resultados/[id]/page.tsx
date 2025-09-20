@@ -126,7 +126,7 @@ export default function ResultadosPage() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6 mb-8">
-          <SubjectAnalysis performance={result.subject_performance} />
+          <SubjectAnalysis subjectScores={result.subject_performance || {}} />
           <Recommendations recommendations={result.recommendations} />
         </div>
 
