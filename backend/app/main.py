@@ -56,7 +56,7 @@ def health_check():
 def init_database():
     """Initialize database with seed data"""
     try:
-        from init_db import main as init_db_main
+        from init_db import init_database as init_db_main
         init_db_main()
         return {"message": "Database initialized successfully"}
     except Exception as e:
