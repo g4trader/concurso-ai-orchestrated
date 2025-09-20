@@ -18,6 +18,10 @@ class Settings(BaseSettings):
     # Environment
     environment: str = "development"
     
+    # Railway/Production settings
+    port: int = 8000
+    host: str = "0.0.0.0"
+    
     class Config:
         env_file = ".env"
 

@@ -1,22 +1,23 @@
 #!/bin/bash
 
-# Script de Deploy do Frontend para Vercel
-# Concurso AI Orchestrated
+# Script para deploy do frontend no Vercel
 
 set -e
 
-echo "🚀 Iniciando deploy do frontend para Vercel..."
+echo "🚀 Fazendo deploy do frontend no Vercel..."
 
 # Cores para output
-RED='\033[0;31m'
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-# Função para log
 log() {
-    echo -e "${BLUE}[$(date +'%Y-%m-%d %H:%M:%S')]${NC} $1"
+    echo -e "${GREEN}[INFO]${NC} $1"
+}
+
+warn() {
+    echo -e "${YELLOW}[WARNING]${NC} $1"
 }
 
 error() {
@@ -24,63 +25,56 @@ error() {
     exit 1
 }
 
-success() {
-    echo -e "${GREEN}[SUCCESS]${NC} $1"
-}
-
-warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
-}
-
-# Verificar se estamos na raiz do projeto
-if [ ! -d "frontend" ]; then
-    error "Execute este script na raiz do projeto (onde está a pasta frontend/)"
-fi
-
-# Navegar para o frontend
+# Navegar para o diretório do frontend
 cd frontend
 
-log "Verificando dependências..."
-if [ ! -d "node_modules" ]; then
-    log "Instalando dependências..."
-    npm install
-fi
-
-log "Executando linting..."
-npm run lint
-
-log "Executando testes..."
-npm test -- --passWithNoTests || true
-
-log "Verificando tipos TypeScript..."
-npm run type-check
-
-log "Fazendo build de produção..."
-npm run build
-
-log "Verificando se Vercel CLI está instalado..."
+# Verificar se Vercel CLI está instalado
 if ! command -v vercel &> /dev/null; then
-    warning "Vercel CLI não encontrado. Instalando..."
+    log "Instalando Vercel CLI..."
     npm install -g vercel
 fi
 
-log "Fazendo login na Vercel (se necessário)..."
-vercel whoami || vercel login
-
-log "Fazendo deploy para Vercel..."
-if [ "$1" = "--prod" ]; then
-    log "Deploy de PRODUÇÃO"
-    vercel --prod
-else
-    log "Deploy de PREVIEW"
-    vercel
+# Verificar se está logado no Vercel
+if ! vercel whoami &> /dev/null; then
+    log "Fazendo login no Vercel..."
+    vercel login
 fi
 
-success "Deploy concluído com sucesso! 🎉"
+# Verificar build local
+log "Testando build local..."
+npm run build
 
-# Voltar para a raiz
-cd ../..
+if [ $? -eq 0 ]; then
+    log "✅ Build local bem-sucedido!"
+else
+    error "❌ Build local falhou. Corrija os erros antes do deploy."
+fi
 
-log "Para verificar o status do deploy:"
-echo "  - Acesse: https://vercel.com/dashboard"
-echo "  - Ou execute: vercel ls"
+# Fazer deploy
+log "Fazendo deploy no Vercel..."
+vercel --prod
+
+# Obter URL do deploy
+FRONTEND_URL=$(vercel ls | grep -o 'https://[^[:space:]]*' | head -1)
+log "Frontend deployado em: $FRONTEND_URL"
+
+# Testar deploy
+log "Testando deploy..."
+sleep 10
+
+if curl -f "$FRONTEND_URL" > /dev/null 2>&1; then
+    log "✅ Deploy do frontend realizado com sucesso!"
+    log "URL: $FRONTEND_URL"
+else
+    warn "Deploy realizado, mas teste de acesso falhou."
+fi
+
+# Voltar para o diretório raiz
+cd ..
+
+log "🎉 Deploy do frontend concluído!"
+echo ""
+echo "📋 Próximos passos:"
+echo "1. Atualize a variável FRONTEND_URL no Railway com: $FRONTEND_URL"
+echo "2. Teste a integração frontend + backend"
+echo "3. Verifique se as APIs estão funcionando corretamente"

@@ -7,10 +7,12 @@ import uvicorn
 from app.main import app
 
 if __name__ == "__main__":
+    from app.config import settings
+    
     uvicorn.run(
         "app.main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True,
+        host=settings.host,
+        port=settings.port,
+        reload=settings.environment == "development",
         log_level="info"
     )
