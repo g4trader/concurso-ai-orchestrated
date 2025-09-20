@@ -125,7 +125,11 @@ export class ApiClient {
     })
   }
 
-  async submitSimulado(id: number, answers: Record<string, number>, timeSpent: number, questions?: any[]) {
+  async submitSimulado(id: number, answers: Record<string, number>, timeSpent: number, questions?: Array<{
+    id: string
+    subject: string
+    correct_answer: number
+  }>) {
     // Calcular subject_scores baseado nas questões
     const subjectScores: Record<string, { correct: number; total: number }> = {}
     

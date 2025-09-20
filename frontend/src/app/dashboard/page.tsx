@@ -20,7 +20,12 @@ interface DashboardStats {
 
 export default function DashboardPage() {
   const { state } = useAuth()
-  const [stats, setStats] = useState<DashboardStats | null>(null)
+  const [stats, setStats] = useState<{
+    totalSimulados: number
+    totalQuestions: number
+    averageScore: number
+    totalTime: number
+  } | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -49,7 +54,7 @@ export default function DashboardPage() {
         } else {
           setError('Erro ao carregar dados do dashboard')
         }
-      } catch (error) {
+      } catch (err) {
         setError('Erro de conexão')
       } finally {
         setIsLoading(false)

@@ -94,7 +94,7 @@ export function SimuladoForm() {
       } else {
         alert(response.error || 'Erro ao criar simulado')
       }
-    } catch (error) {
+    } catch (err) {
       alert('Erro de conexão. Verifique se o backend está rodando.')
     } finally {
       setIsGenerating(false)

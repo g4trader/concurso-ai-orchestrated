@@ -140,9 +140,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Se chegou até aqui, credenciais inválidas
       const errorData = await response.json().catch(() => ({}))
       throw new Error(errorData.detail || 'Credenciais inválidas')
-    } catch (error) {
-      dispatch({ type: 'LOGIN_ERROR', payload: error instanceof Error ? error.message : 'Erro de conexão' })
-    }
+      } catch (err) {
+        dispatch({ type: 'LOGIN_ERROR', payload: err instanceof Error ? err.message : 'Erro de conexão' })
+      }
   }
 
   const logout = () => {
