@@ -12,7 +12,7 @@ if ! command -v gcloud &> /dev/null; then
 fi
 
 # Configurar variáveis
-PROJECT_ID="concurso-ai-project"
+PROJECT_ID="automatizar-452311"
 SERVICE_NAME="concurso-ai-backend"
 REGION="us-central1"
 
