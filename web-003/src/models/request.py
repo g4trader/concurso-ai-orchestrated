@@ -12,7 +12,7 @@ class SimuladoGenerationRequest(BaseModel):
     edital_id: str = Field(..., description="ID do edital")
     total_questions: int = Field(..., description="Número total de questões", ge=1, le=100)
     time_limit: int = Field(..., description="Tempo limite em minutos", ge=30, le=300)
-    difficulty: str = Field(..., description="Dificuldade", regex="^(easy|medium|hard)$")
+    difficulty: str = Field(..., description="Dificuldade", pattern="^(easy|medium|hard)$")
     topics: Optional[List[str]] = Field(None, description="Tópicos específicos")
     custom_instructions: Optional[str] = Field(None, description="Instruções customizadas")
 
