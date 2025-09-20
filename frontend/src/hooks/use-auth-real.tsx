@@ -120,7 +120,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       
       dispatch({ type: 'LOGIN_FAILURE', payload: 'Credenciais inválidas' })
-    } catch (error) {
+    } catch {
       dispatch({ type: 'LOGIN_FAILURE', payload: 'Erro de conexão. Verifique se o backend está rodando.' })
     }
   }
@@ -137,7 +137,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         dispatch({ type: 'LOGIN_FAILURE', payload: response.error || 'Erro no registro' })
       }
-    } catch (error) {
+    } catch {
       dispatch({ type: 'LOGIN_FAILURE', payload: 'Erro de conexão. Verifique se o backend está rodando.' })
     }
   }

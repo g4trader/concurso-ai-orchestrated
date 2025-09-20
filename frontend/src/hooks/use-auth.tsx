@@ -76,7 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         const user = JSON.parse(userData)
         dispatch({ type: 'LOAD_USER', payload: user })
-      } catch (error) {
+      } catch {
         // Limpar dados inválidos
         localStorage.removeItem('auth_token')
         localStorage.removeItem('user_data')
