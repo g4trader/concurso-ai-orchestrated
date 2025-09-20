@@ -32,10 +32,10 @@ export default function DashboardPage() {
       setError(null)
       
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 
-          (typeof window !== 'undefined' && window.location.hostname === 'localhost' 
-            ? 'http://localhost:8000' 
-            : 'https://concurso-ai-backend-<PROJECT_ID>-uc.a.run.app')
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 
+        (typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+          ? 'http://localhost:8000' 
+          : 'https://concurso-ai-backend-609095880025.us-central1.run.app')
 
         const response = await fetch(`${apiUrl}/dashboard/stats`, {
           headers: {
