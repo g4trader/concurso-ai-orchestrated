@@ -122,25 +122,25 @@ export default function DashboardPage() {
         <div className="grid md:grid-cols-4 gap-6 mb-8">
           <StatsCard
             title="Simulados Realizados"
-            value={stats?.total_simulados?.toString() || "0"}
+            value={stats?.totalSimulados?.toString() || "0"}
             change="Dados em tempo real"
             icon="📊"
           />
           <StatsCard
             title="Taxa de Acerto"
-            value={`${stats?.average_score?.toFixed(1) || "0"}%`}
+            value={`${stats?.averageScore?.toFixed(1) || "0"}%`}
             change="Média geral"
             icon="🎯"
           />
           <StatsCard
             title="Tempo Médio"
-            value={`${Math.round((stats?.average_time_spent || 0) / 60)}min`}
+            value={`${Math.round((stats?.totalTime || 0) / 60)}min`}
             change="Por simulado"
             icon="⏱️"
           />
           <StatsCard
             title="Ranking"
-            value={`#${stats?.ranking_position || "N/A"}`}
+            value={`#${stats?.totalQuestions || "N/A"}`}
             change="Posição atual"
             icon="🏆"
           />
