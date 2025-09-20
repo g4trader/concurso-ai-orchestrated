@@ -52,17 +52,17 @@ log "Configurando variáveis de ambiente..."
 
 # Gerar secret key seguro
 SECRET_KEY=$(openssl rand -hex 32)
-railway variables set SECRET_KEY="$SECRET_KEY"
+railway variables SECRET_KEY="$SECRET_KEY"
 
 # Configurar outras variáveis
-railway variables set ALGORITHM="HS256"
-railway variables set ACCESS_TOKEN_EXPIRE_MINUTES="30"
-railway variables set ENVIRONMENT="production"
-railway variables set HOST="0.0.0.0"
-railway variables set PORT="8000"
+railway variables ALGORITHM="HS256"
+railway variables ACCESS_TOKEN_EXPIRE_MINUTES="30"
+railway variables ENVIRONMENT="production"
+railway variables HOST="0.0.0.0"
+railway variables PORT="8000"
 
 # Configurar CORS para o frontend
-railway variables set FRONTEND_URL="https://concurso-ai-orchestrated.vercel.app"
+railway variables FRONTEND_URL="https://concurso-ai-orchestrated.vercel.app"
 
 log "Variáveis de ambiente configuradas:"
 railway variables
