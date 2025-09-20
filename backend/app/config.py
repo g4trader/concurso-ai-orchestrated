@@ -18,12 +18,12 @@ class Settings(BaseSettings):
     # Environment
     environment: str = "development"
     
-    # Railway/Production settings
-    port: int = 8000
+    # Cloud Run/Production settings
+    port: int = 8080
     host: str = "0.0.0.0"
     
-    # Production database (Railway/PostgreSQL)
-    railway_database_url: Optional[str] = None
+    # Production database (Cloud SQL/PostgreSQL)
+    cloud_sql_database_url: Optional[str] = None
     
     class Config:
         env_file = ".env"

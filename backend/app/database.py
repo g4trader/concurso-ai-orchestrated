@@ -7,9 +7,9 @@ import os
 # Choose database URL based on environment
 database_url = settings.database_url
 
-# Check for Railway PostgreSQL URL in production
-if os.getenv("RAILWAY_DATABASE_URL"):
-    database_url = os.getenv("RAILWAY_DATABASE_URL")
+# Check for Cloud SQL PostgreSQL URL in production
+if os.getenv("CLOUD_SQL_DATABASE_URL"):
+    database_url = os.getenv("CLOUD_SQL_DATABASE_URL")
 elif os.getenv("DATABASE_URL"):
     database_url = os.getenv("DATABASE_URL")
 
