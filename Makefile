@@ -1,7 +1,7 @@
 # Concurso AI Orchestrated - Makefile
 # Comandos para facilitar o desenvolvimento e deploy
 
-.PHONY: help install build start stop clean test lint format
+.PHONY: help install build start stop clean test lint format deploy deploy-preview deploy-prod
 
 # Variáveis
 FRONTEND_DIR = frontend/web-001
@@ -18,6 +18,8 @@ help:
 	@echo "  test        - Executa testes de todos os serviços"
 	@echo "  lint        - Executa linting em todos os serviços"
 	@echo "  format      - Formata código de todos os serviços"
+	@echo "  deploy      - Deploy do frontend para Vercel (preview)"
+	@echo "  deploy-prod - Deploy do frontend para Vercel (produção)"
 	@echo ""
 	@echo "Comandos específicos:"
 	@echo "  install-frontend - Instala dependências do frontend"
@@ -128,3 +130,24 @@ dev: install
 	@echo "  - WEB-003: http://localhost:8007"
 	@echo "  - WEB-004: http://localhost:8008"
 	make start
+
+# Deploy
+deploy:
+	@echo "Fazendo deploy do frontend para Vercel (preview)..."
+	./deploy-frontend.sh
+
+deploy-prod:
+	@echo "Fazendo deploy do frontend para Vercel (produção)..."
+	./deploy-frontend.sh --prod
+
+deploy-preview:
+	@echo "Fazendo deploy de preview do frontend..."
+	cd $(FRONTEND_DIR) && vercel
+
+# Verificação pré-deploy
+pre-deploy:
+	@echo "Verificando se está tudo pronto para deploy..."
+	cd $(FRONTEND_DIR) && npm run lint
+	cd $(FRONTEND_DIR) && npm run type-check
+	cd $(FRONTEND_DIR) && npm run build
+	@echo "✅ Tudo pronto para deploy!"

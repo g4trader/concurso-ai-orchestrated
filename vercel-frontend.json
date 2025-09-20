@@ -1,0 +1,26 @@
+{
+  "name": "concurso-ai-frontend",
+  "version": 2,
+  "builds": [
+    {
+      "src": "frontend/web-001/package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/web-001/$1"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "functions": {
+    "frontend/web-001/src/app/api/**/*.ts": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "regions": ["iad1"],
+  "framework": "nextjs"
+}
