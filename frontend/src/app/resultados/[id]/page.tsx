@@ -41,7 +41,7 @@ export default function ResultadosPage() {
         const response = await apiClient.getSimuladoResult(parseInt(params.id as string))
 
         if (response.data) {
-          setResult(response.data)
+          setResult(response.data as SimuladoResult)
         } else {
           setError(response.error || 'Resultado não encontrado')
         }
