@@ -4,7 +4,7 @@
 .PHONY: help install build start stop clean test lint format deploy deploy-preview deploy-prod
 
 # Variáveis
-FRONTEND_DIR = frontend/web-001
+FRONTEND_DIR = frontend
 BACKEND_DIRS = backend/ia-0 backend/ia-1 backend/ia-2 backend/ia-3 backend/ops-002 backend/ux-001 backend/web-002 backend/web-003 backend/web-004
 
 # Ajuda

@@ -58,7 +58,7 @@
       "description": "Aplicação frontend em Next.js/React",
       "services": [
         {
-          "name": "web-001",
+          "name": "main-app",
           "port": 3000,
           "description": "Interface web principal"
         }

@@ -33,12 +33,12 @@ warning() {
 }
 
 # Verificar se estamos na raiz do projeto
-if [ ! -d "frontend/web-001" ]; then
+if [ ! -d "frontend" ]; then
     error "Execute este script na raiz do projeto (onde está a pasta frontend/)"
 fi
 
 # Navegar para o frontend
-cd frontend/web-001
+cd frontend
 
 log "Verificando dependências..."
 if [ ! -d "node_modules" ]; then

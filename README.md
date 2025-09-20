@@ -17,7 +17,9 @@ concurso-ai-orchestrated/
 │   ├── web-003/               # Serviço web 3
 │   └── web-004/               # Serviço web 4
 ├── frontend/                   # Aplicação frontend (Next.js/React)
-│   └── web-001/               # Interface web principal
+│   ├── src/                   # Código fonte da aplicação
+│   ├── package.json           # Dependências e scripts
+│   └── next.config.js         # Configurações do Next.js
 └── shared/                     # Recursos compartilhados
     ├── STORIES/               # Histórias de usuário e especificações
     ├── SCHEMAS/               # Esquemas JSON
@@ -48,7 +50,7 @@ A aplicação frontend principal:
 
 ```bash
 # Navegar para o frontend
-cd frontend/web-001
+cd frontend
 
 # Instalar dependências
 npm install
@@ -101,10 +103,10 @@ Toda a documentação do projeto está organizada na pasta `shared/`:
 find backend -name "requirements.txt" -execdir pip install -r {} \;
 
 # Executar testes do frontend
-cd frontend/web-001 && npm test
+cd frontend && npm test
 
 # Build de produção do frontend
-cd frontend/web-001 && npm run build
+cd frontend && npm run build
 ```
 
 ## 📋 Status do Projeto

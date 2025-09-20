@@ -6,11 +6,11 @@ Este documento contém todas as informações necessárias para configurar o dep
 
 ### ✅ Arquivos Criados/Configurados
 
-- [x] `frontend/web-001/vercel.json` - Configuração específica do frontend
-- [x] `frontend/web-001/next.config.js` - Configurações otimizadas para produção
-- [x] `frontend/web-001/package.json` - Scripts de deploy adicionados
-- [x] `frontend/web-001/DEPLOY.md` - Instruções detalhadas de deploy
-- [x] `frontend/web-001/vercel-env.example` - Exemplo de variáveis de ambiente
+- [x] `frontend/vercel.json` - Configuração específica do frontend
+- [x] `frontend/next.config.js` - Configurações otimizadas para produção
+- [x] `frontend/package.json` - Scripts de deploy adicionados
+- [x] `frontend/DEPLOY.md` - Instruções detalhadas de deploy
+- [x] `frontend/vercel-env.example` - Exemplo de variáveis de ambiente
 - [x] `deploy-frontend.sh` - Script automatizado de deploy
 - [x] `vercel-frontend.json` - Configuração alternativa para Vercel
 - [x] `Makefile` - Comandos de deploy adicionados
@@ -25,7 +25,7 @@ Este documento contém todas as informações necessárias para configurar o dep
 4. **Configure o projeto:**
    - **Repository**: `concurso-ai-orchestrated`
    - **Framework Preset**: `Next.js`
-   - **Root Directory**: `frontend/web-001`
+   - **Root Directory**: `frontend`
    - **Build Command**: `npm run build`
    - **Output Directory**: `.next`
 
@@ -95,7 +95,7 @@ make deploy-prod           # Deploy de produção
 make deploy-preview        # Deploy rápido via CLI
 
 # Frontend específico
-cd frontend/web-001
+cd frontend
 npm run deploy             # Deploy de produção
 npm run deploy:preview     # Deploy de preview
 npm run analyze            # Análise do bundle
@@ -115,7 +115,7 @@ Após o deploy, você terá acesso a:
 ### Build Falha
 ```bash
 # Verificar localmente
-cd frontend/web-001
+cd frontend
 npm run build
 
 # Ver logs na Vercel

@@ -4,14 +4,14 @@ services:
   # Frontend - Next.js Application
   frontend:
     build:
-      context: ./frontend/web-001
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=development
     volumes:
-      - ./frontend/web-001:/app
+      - ./frontend:/app
       - /app/node_modules
     depends_on:
       - ia-0
