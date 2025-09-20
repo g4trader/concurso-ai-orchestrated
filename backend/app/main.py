@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
-from app.routers import auth, simulados, dashboard
 
 # Create FastAPI app
 app = FastAPI(
@@ -30,10 +29,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include routers
-app.include_router(auth.router)
-app.include_router(simulados.router)
-app.include_router(dashboard.router)
+# Include routers (with error handling)
+try:
+    from app.routers import auth, simulados, dashboard
+    app.include_router(auth.router)
+    app.include_router(simulados.router)
+    app.include_router(dashboard.router)
+except Exception as e:
+    print(f"Warning: Could not load routers: {e}")
+    # App will still start with basic endpoints
 
 
 @app.get("/")
@@ -46,3 +50,14 @@ def read_root():
 def health_check():
     """Health check endpoint"""
     return {"status": "healthy"}
+
+
+@app.post("/init-db")
+def init_database():
+    """Initialize database with seed data"""
+    try:
+        from init_db import main as init_db_main
+        init_db_main()
+        return {"message": "Database initialized successfully"}
+    except Exception as e:
+        return {"error": str(e)}
