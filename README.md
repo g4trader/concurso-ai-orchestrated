@@ -1,41 +1,120 @@
-# Concurso-AI Orchestrated
+# Concurso AI Orchestrated
 
-Este repositório contém a **orquestração completa de histórias e prompts** para desenvolver um
-MVP de plataforma de estudos para concursos públicos usando **instâncias de IA no Cursor**.
+Sistema de orquestração de IA para concursos, organizado em uma arquitetura modular com separação clara entre frontend, backend e recursos compartilhados.
 
-## 📂 Estrutura
+## 📁 Estrutura do Projeto
 
-- `playdevs/ROADMAP.md` → visão geral dos marcos até o Go-to-Market Beta
-- `playdevs/SPRINT_PLAN.yml` → sprint atual com histórias e ordem
-- `playdevs/STORIES/{ID}/` → cada história (STORY.md, ORDER.yml, PROMPTS/, OUTPUTS/)
-- `playdevs/TEMPLATES/` → prompts reutilizáveis por papel
+```
+concurso-ai-orchestrated/
+├── backend/                    # Serviços backend (Python/FastAPI)
+│   ├── ia-0/                  # Serviço de IA 0
+│   ├── ia-1/                  # Serviço de IA 1
+│   ├── ia-2/                  # Serviço de IA 2
+│   ├── ia-3/                  # Serviço de IA 3
+│   ├── ops-002/               # Serviço de operações
+│   ├── ux-001/                # Serviço de UX
+│   ├── web-002/               # Serviço web 2
+│   ├── web-003/               # Serviço web 3
+│   └── web-004/               # Serviço web 4
+├── frontend/                   # Aplicação frontend (Next.js/React)
+│   └── web-001/               # Interface web principal
+└── shared/                     # Recursos compartilhados
+    ├── STORIES/               # Histórias de usuário e especificações
+    ├── SCHEMAS/               # Esquemas JSON
+    ├── TEMPLATES/             # Templates de documentação
+    ├── TOOLS/                 # Ferramentas de desenvolvimento
+    ├── RELATORES/             # Relatórios de sprints
+    └── playdevs/              # Documentação e configurações
+```
 
-## 🚀 Como usar no Cursor
+## 🚀 Início Rápido
 
-1. Clone este repositório no Cursor (pode ser fork do GitHub).
-2. Abra `playdevs/SPRINT_PLAN.yml` para ver a lista de histórias da sprint.
-3. Entre em uma pasta de história, ex.: `playdevs/STORIES/CEB-001/`.
-4. Siga o arquivo `ORDER.yml`:
-   - Cada passo indica: **papel** (Arquiteta, Backend, QA…), **entrada**, **prompt** a usar, **output esperado**.
-   - Abra o prompt em `PROMPTS/` e execute na instância de IA correspondente.
-   - Salve o resultado no arquivo/pasta de `OUTPUTS/` indicado.
-5. Continue até o último passo (Reviewer).
+### Backend
+Cada serviço backend é independente e pode ser executado separadamente:
 
-## 🛠 Fluxo de Trabalho
+```bash
+# Navegar para um serviço específico
+cd backend/ia-0
 
-- Cada história gera um conjunto de artefatos em `OUTPUTS/`.
-- Depois de revisado, abra um **PR** para integrar ao branch `main`.
-- O PR deve conter:
-  - STORY.md (imutável)
-  - ORDER.yml (imutável)
-  - Saídas em OUTPUTS/ (geradas na sprint)
-- O merge depende de aprovação da etapa **Reviewer**.
+# Instalar dependências
+pip install -r requirements.txt
 
-## 📌 Status Atual
+# Executar o serviço
+python src/main.py
+```
 
-- Sprint 1 foca em coleta e parsing (CEB-001 e CEB-002).
-- As demais histórias já estão mapeadas (SIM-001, PLN-001, SR-001).
+### Frontend
+A aplicação frontend principal:
 
----
+```bash
+# Navegar para o frontend
+cd frontend/web-001
 
-📖 Veja também: [CONTRIBUTING.md](CONTRIBUTING.md)
+# Instalar dependências
+npm install
+
+# Executar em modo desenvolvimento
+npm run dev
+```
+
+## 🏗️ Arquitetura
+
+### Backend
+- **Framework**: FastAPI
+- **Linguagem**: Python 3.8+
+- **Estrutura**: Cada serviço segue o padrão de pastas:
+  - `src/api/` - Endpoints da API
+  - `src/models/` - Modelos de dados
+  - `src/services/` - Lógica de negócio
+  - `src/config/` - Configurações
+  - `src/utils/` - Utilitários
+
+### Frontend
+- **Framework**: Next.js 14
+- **Linguagem**: TypeScript
+- **Styling**: Tailwind CSS
+- **Estrutura**:
+  - `src/app/` - Páginas da aplicação
+  - `src/components/` - Componentes reutilizáveis
+  - `src/hooks/` - Hooks customizados
+  - `src/types/` - Definições de tipos
+
+## 📚 Documentação
+
+Toda a documentação do projeto está organizada na pasta `shared/`:
+
+- **Stories**: Histórias de usuário e especificações técnicas
+- **Schemas**: Esquemas JSON para validação de dados
+- **Templates**: Templates para documentação
+- **Relatórios**: Relatórios de sprints e progresso
+
+## 🔧 Desenvolvimento
+
+### Pré-requisitos
+- Python 3.8+
+- Node.js 18+
+- Docker (opcional)
+
+### Scripts Úteis
+```bash
+# Executar todos os testes do backend
+find backend -name "requirements.txt" -execdir pip install -r {} \;
+
+# Executar testes do frontend
+cd frontend/web-001 && npm test
+
+# Build de produção do frontend
+cd frontend/web-001 && npm run build
+```
+
+## 📋 Status do Projeto
+
+Este projeto está em desenvolvimento ativo. Consulte a pasta `shared/RELATORES/` para relatórios de progresso e `shared/ROADMAP.md` para o roadmap do projeto.
+
+## 🤝 Contribuição
+
+Consulte `shared/CONTRIBUTING.md` para diretrizes de contribuição.
+
+## 📄 Licença
+
+Este projeto está licenciado sob a licença especificada no arquivo `LICENSE`.

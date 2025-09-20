@@ -1,0 +1,93 @@
+{
+  "name": "concurso-ai-orchestrated",
+  "version": "1.0.0",
+  "description": "Sistema de orquestração de IA para concursos",
+  "type": "monorepo",
+  "structure": {
+    "backend": {
+      "description": "Serviços backend em Python/FastAPI",
+      "services": [
+        {
+          "name": "ia-0",
+          "port": 8000,
+          "description": "Serviço de IA 0"
+        },
+        {
+          "name": "ia-1", 
+          "port": 8001,
+          "description": "Serviço de IA 1"
+        },
+        {
+          "name": "ia-2",
+          "port": 8002,
+          "description": "Serviço de IA 2"
+        },
+        {
+          "name": "ia-3",
+          "port": 8003,
+          "description": "Serviço de IA 3"
+        },
+        {
+          "name": "ops-002",
+          "port": 8004,
+          "description": "Serviço de operações"
+        },
+        {
+          "name": "ux-001",
+          "port": 8005,
+          "description": "Serviço de UX"
+        },
+        {
+          "name": "web-002",
+          "port": 8006,
+          "description": "Serviço web 2"
+        },
+        {
+          "name": "web-003",
+          "port": 8007,
+          "description": "Serviço web 3"
+        },
+        {
+          "name": "web-004",
+          "port": 8008,
+          "description": "Serviço web 4"
+        }
+      ]
+    },
+    "frontend": {
+      "description": "Aplicação frontend em Next.js/React",
+      "services": [
+        {
+          "name": "web-001",
+          "port": 3000,
+          "description": "Interface web principal"
+        }
+      ]
+    },
+    "shared": {
+      "description": "Recursos compartilhados e documentação",
+      "folders": [
+        "STORIES",
+        "SCHEMAS", 
+        "TEMPLATES",
+        "TOOLS",
+        "RELATORES",
+        "playdevs"
+      ]
+    }
+  },
+  "scripts": {
+    "install": "make install",
+    "build": "make build",
+    "start": "make start",
+    "dev": "make dev",
+    "test": "make test",
+    "lint": "make lint",
+    "format": "make format"
+  },
+  "technologies": {
+    "backend": ["Python", "FastAPI", "Pydantic", "Uvicorn"],
+    "frontend": ["Next.js", "React", "TypeScript", "Tailwind CSS"],
+    "devops": ["Docker", "Docker Compose", "Vercel"]
+  }
+}

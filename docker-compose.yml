@@ -1,0 +1,127 @@
+version: '3.8'
+
+services:
+  # Frontend - Next.js Application
+  frontend:
+    build:
+      context: ./frontend/web-001
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./frontend/web-001:/app
+      - /app/node_modules
+    depends_on:
+      - ia-0
+      - ia-1
+      - ia-2
+      - ia-3
+
+  # Backend Services - IA Services
+  ia-0:
+    build:
+      context: ./backend/ia-0
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=development
+    volumes:
+      - ./backend/ia-0:/app
+
+  ia-1:
+    build:
+      context: ./backend/ia-1
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    environment:
+      - ENV=development
+    volumes:
+      - ./backend/ia-1:/app
+
+  ia-2:
+    build:
+      context: ./backend/ia-2
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8000"
+    environment:
+      - ENV=development
+    volumes:
+      - ./backend/ia-2:/app
+
+  ia-3:
+    build:
+      context: ./backend/ia-3
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8000"
+    environment:
+      - ENV=development
+    volumes:
+      - ./backend/ia-3:/app
+
+  # Operations Service
+  ops-002:
+    build:
+      context: ./backend/ops-002
+      dockerfile: Dockerfile
+    ports:
+      - "8004:8000"
+    environment:
+      - ENV=development
+    volumes:
+      - ./backend/ops-002:/app
+
+  # UX Service
+  ux-001:
+    build:
+      context: ./backend/ux-001
+      dockerfile: Dockerfile
+    ports:
+      - "8005:8000"
+    environment:
+      - ENV=development
+    volumes:
+      - ./backend/ux-001:/app
+
+  # Web Services
+  web-002:
+    build:
+      context: ./backend/web-002
+      dockerfile: Dockerfile
+    ports:
+      - "8006:8000"
+    environment:
+      - ENV=development
+    volumes:
+      - ./backend/web-002:/app
+
+  web-003:
+    build:
+      context: ./backend/web-003
+      dockerfile: Dockerfile
+    ports:
+      - "8007:8000"
+    environment:
+      - ENV=development
+    volumes:
+      - ./backend/web-003:/app
+
+  web-004:
+    build:
+      context: ./backend/web-004
+      dockerfile: Dockerfile
+    ports:
+      - "8008:8000"
+    environment:
+      - ENV=development
+    volumes:
+      - ./backend/web-004:/app
+
+networks:
+  default:
+    name: concurso-ai-network
