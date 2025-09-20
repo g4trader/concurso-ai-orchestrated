@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -8,8 +9,16 @@ import { Alert } from '@/components/ui/alert'
 
 export function LoginForm() {
   const { state, login } = useAuth()
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  // Redirecionar após login bem-sucedido
+  useEffect(() => {
+    if (state.isAuthenticated && !state.isLoading) {
+      router.push('/dashboard')
+    }
+  }, [state.isAuthenticated, state.isLoading, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

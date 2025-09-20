@@ -1,0 +1,159 @@
+{
+  "timestamp": "2025-09-20T13:34:42.364487",
+  "url": "https://concurso-ai-orchestrated.vercel.app/",
+  "tests": [
+    {
+      "name": "Page Load",
+      "status": "PASS",
+      "message": "Página carregada com título: Concurso AI - Simulados Inteligentes",
+      "details": {},
+      "timestamp": "2025-09-20T13:34:48.552115"
+    },
+    {
+      "name": "Element Check - Título principal",
+      "status": "PASS",
+      "message": "Elemento h1 encontrado e visível",
+      "details": {},
+      "timestamp": "2025-09-20T13:34:48.596637"
+    },
+    {
+      "name": "Element Check - Navegação",
+      "status": "PASS",
+      "message": "Elemento nav encontrado e visível",
+      "details": {},
+      "timestamp": "2025-09-20T13:34:48.626148"
+    },
+    {
+      "name": "Element Check - Botões",
+      "status": "PASS",
+      "message": "Elemento button encontrado e visível",
+      "details": {},
+      "timestamp": "2025-09-20T13:34:48.671250"
+    },
+    {
+      "name": "Login Link",
+      "status": "PASS",
+      "message": "Link de login encontrado e clicável",
+      "details": {},
+      "timestamp": "2025-09-20T13:34:48.721223"
+    },
+    {
+      "name": "Login Navigation",
+      "status": "PASS",
+      "message": "Redirecionamento para login bem-sucedido: https://concurso-ai-orchestrated.vercel.app/login",
+      "details": {},
+      "timestamp": "2025-09-20T13:34:50.881779"
+    },
+    {
+      "name": "Form Element - Campo de email",
+      "status": "PASS",
+      "message": "Elemento input[type='email'] encontrado e funcional",
+      "details": {},
+      "timestamp": "2025-09-20T13:34:50.924274"
+    },
+    {
+      "name": "Form Element - Campo de senha",
+      "status": "PASS",
+      "message": "Elemento input[type='password'] encontrado e funcional",
+      "details": {},
+      "timestamp": "2025-09-20T13:34:50.964196"
+    },
+    {
+      "name": "Form Element - Botão de submit",
+      "status": "PASS",
+      "message": "Elemento button[type='submit'] encontrado e funcional",
+      "details": {},
+      "timestamp": "2025-09-20T13:34:51.005716"
+    },
+    {
+      "name": "Form Fill",
+      "status": "PASS",
+      "message": "Formulário preenchido com sucesso",
+      "details": {},
+      "timestamp": "2025-09-20T13:34:51.468604"
+    },
+    {
+      "name": "Login Submit",
+      "status": "WARN",
+      "message": "Login pode ter falhado - sem mensagem de erro visível",
+      "details": {},
+      "timestamp": "2025-09-20T13:35:04.597114"
+    },
+    {
+      "name": "Responsive - Desktop",
+      "status": "PASS",
+      "message": "Layout funcional em 1920x1080",
+      "details": {},
+      "timestamp": "2025-09-20T13:35:06.399303"
+    },
+    {
+      "name": "Responsive - Tablet",
+      "status": "PASS",
+      "message": "Layout funcional em 1024x768",
+      "details": {},
+      "timestamp": "2025-09-20T13:35:07.473195"
+    },
+    {
+      "name": "Responsive - Mobile",
+      "status": "PASS",
+      "message": "Layout funcional em 375x667",
+      "details": {},
+      "timestamp": "2025-09-20T13:35:08.908796"
+    },
+    {
+      "name": "Responsive - Mobile Large",
+      "status": "PASS",
+      "message": "Layout funcional em 414x896",
+      "details": {},
+      "timestamp": "2025-09-20T13:35:10.320148"
+    },
+    {
+      "name": "Page Load Time",
+      "status": "PASS",
+      "message": "Carregamento rápido: 0.36s",
+      "details": {},
+      "timestamp": "2025-09-20T13:35:10.676925"
+    },
+    {
+      "name": "Resource Count",
+      "status": "PASS",
+      "message": "Poucos recursos: 10",
+      "details": {},
+      "timestamp": "2025-09-20T13:35:10.732813"
+    },
+    {
+      "name": "Image Alt Text",
+      "status": "PASS",
+      "message": "Nenhuma imagem encontrada",
+      "details": {},
+      "timestamp": "2025-09-20T13:35:20.829722"
+    },
+    {
+      "name": "Text Elements",
+      "status": "PASS",
+      "message": "13 elementos de texto encontrados",
+      "details": {},
+      "timestamp": "2025-09-20T13:35:20.851674"
+    },
+    {
+      "name": "User Flow - Login to Dashboard",
+      "status": "WARN",
+      "message": "Fluxo pode ter falhado. URL: https://concurso-ai-orchestrated.vercel.app/login",
+      "details": {},
+      "timestamp": "2025-09-20T13:35:27.711096"
+    },
+    {
+      "name": "Dashboard Navigation",
+      "status": "PASS",
+      "message": "2 links de navegação encontrados",
+      "details": {},
+      "timestamp": "2025-09-20T13:35:27.776354"
+    }
+  ],
+  "summary": {
+    "total_tests": 21,
+    "passed": 19,
+    "failed": 0,
+    "warnings": 2
+  }
+}
