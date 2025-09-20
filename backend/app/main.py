@@ -10,10 +10,21 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Configure CORS origins based on environment
+cors_origins = [settings.frontend_url]
+
+# Add production origins if in production
+if settings.environment == "production":
+    cors_origins.extend([
+        "https://concurso-ai-frontend.vercel.app",
+        "https://concurso-ai.vercel.app",
+        "https://*.vercel.app"
+    ])
+
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.frontend_url],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

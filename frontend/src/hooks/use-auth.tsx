@@ -93,7 +93,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       formData.append('username', credentials.email)
       formData.append('password', credentials.password)
 
-      const response = await fetch('http://localhost:8000/auth/login', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 
+        (typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+          ? 'http://localhost:8000' 
+          : 'https://concurso-ai-backend.railway.app')
+
+      const response = await fetch(`${apiUrl}/auth/login`, {
         method: 'POST',
         body: formData,
       })
@@ -102,7 +107,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const tokenData = await response.json()
         
         // Buscar dados do usuário
-        const userResponse = await fetch('http://localhost:8000/auth/me', {
+        const userResponse = await fetch(`${apiUrl}/auth/me`, {
           headers: {
             'Authorization': `Bearer ${tokenData.access_token}`
           }

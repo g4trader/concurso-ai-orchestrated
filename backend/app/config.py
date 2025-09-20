@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     port: int = 8000
     host: str = "0.0.0.0"
     
+    # Production database (Railway/PostgreSQL)
+    railway_database_url: Optional[str] = None
+    
     class Config:
         env_file = ".env"
 
