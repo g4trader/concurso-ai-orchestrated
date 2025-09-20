@@ -1,127 +1,50 @@
 version: '3.8'
 
 services:
-  # Frontend - Next.js Application
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
+  # PostgreSQL Database
+  db:
+    image: postgres:15
     environment:
-      - NODE_ENV=development
+      POSTGRES_DB: concurso_ai
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
     volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    depends_on:
-      - ia-0
-      - ia-1
-      - ia-2
-      - ia-3
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d concurso_ai"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  # Backend Services - IA Services
-  ia-0:
-    build:
-      context: ./backend/ia-0
-      dockerfile: Dockerfile
+  # Backend API
+  backend:
+    build: ./backend
     ports:
       - "8000:8000"
     environment:
-      - ENV=development
+      DATABASE_URL: postgresql://user:password@db:5432/concurso_ai
+      SECRET_KEY: your-secret-key-here-change-in-production
+      FRONTEND_URL: http://localhost:3000
+    depends_on:
+      db:
+        condition: service_healthy
     volumes:
-      - ./backend/ia-0:/app
+      - ./backend:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
-  ia-1:
-    build:
-      context: ./backend/ia-1
-      dockerfile: Dockerfile
+  # Frontend
+  frontend:
+    build: ./frontend
     ports:
-      - "8001:8000"
+      - "3000:3000"
     environment:
-      - ENV=development
+      NEXT_PUBLIC_API_URL: http://localhost:8000
     volumes:
-      - ./backend/ia-1:/app
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev
 
-  ia-2:
-    build:
-      context: ./backend/ia-2
-      dockerfile: Dockerfile
-    ports:
-      - "8002:8000"
-    environment:
-      - ENV=development
-    volumes:
-      - ./backend/ia-2:/app
-
-  ia-3:
-    build:
-      context: ./backend/ia-3
-      dockerfile: Dockerfile
-    ports:
-      - "8003:8000"
-    environment:
-      - ENV=development
-    volumes:
-      - ./backend/ia-3:/app
-
-  # Operations Service
-  ops-002:
-    build:
-      context: ./backend/ops-002
-      dockerfile: Dockerfile
-    ports:
-      - "8004:8000"
-    environment:
-      - ENV=development
-    volumes:
-      - ./backend/ops-002:/app
-
-  # UX Service
-  ux-001:
-    build:
-      context: ./backend/ux-001
-      dockerfile: Dockerfile
-    ports:
-      - "8005:8000"
-    environment:
-      - ENV=development
-    volumes:
-      - ./backend/ux-001:/app
-
-  # Web Services
-  web-002:
-    build:
-      context: ./backend/web-002
-      dockerfile: Dockerfile
-    ports:
-      - "8006:8000"
-    environment:
-      - ENV=development
-    volumes:
-      - ./backend/web-002:/app
-
-  web-003:
-    build:
-      context: ./backend/web-003
-      dockerfile: Dockerfile
-    ports:
-      - "8007:8000"
-    environment:
-      - ENV=development
-    volumes:
-      - ./backend/web-003:/app
-
-  web-004:
-    build:
-      context: ./backend/web-004
-      dockerfile: Dockerfile
-    ports:
-      - "8008:8000"
-    environment:
-      - ENV=development
-    volumes:
-      - ./backend/web-004:/app
-
-networks:
-  default:
-    name: concurso-ai-network
+volumes:
+  postgres_data:

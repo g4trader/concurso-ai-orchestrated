@@ -70,12 +70,35 @@ export function SimuladoForm() {
     e.preventDefault()
     setIsGenerating(true)
     
-    // Simular geração do simulado
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    setIsGenerating(false)
-    // Aqui você redirecionaria para a página do simulado
-    alert('Simulado gerado com sucesso! (Funcionalidade em desenvolvimento)')
+    try {
+      // Importar o cliente da API
+      const { apiClient } = await import('@/lib/api')
+      
+      // Criar simulado via API real
+      const response = await apiClient.createSimulado({
+        title: `Simulado ${config.banca} - ${config.materias.join(', ')}`,
+        config: {
+          banca: config.banca,
+          subjects: config.materias,
+          num_questions: config.numQuestoes,
+          time_limit: config.tempoLimite,
+          level: config.nivel
+        },
+        time_limit: config.tempoLimite,
+        total_questions: config.numQuestoes
+      })
+      
+      if (response.data) {
+        // Redirecionar para a página do simulado
+        window.location.href = `/simulado/${response.data.id}`
+      } else {
+        alert(response.error || 'Erro ao criar simulado')
+      }
+    } catch (error) {
+      alert('Erro de conexão. Verifique se o backend está rodando.')
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
   return (
