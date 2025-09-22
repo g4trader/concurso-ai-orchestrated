@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 30
     
     # CORS
-    frontend_url: str = "http://localhost:3000"
+    frontend_url: str = "http://localhost:3001"
     
     # Environment
     environment: str = "development"

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisador de Editais - IA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .input-section {
+            margin-bottom: 40px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .result-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #3498db;
+        }
+
+        .result-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .result-value {
+            color: #7f8c8d;
+        }
+
+        .status-success {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .status-error {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .sample-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-sample {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-sample:hover {
+            transform: translateY(-1px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Analisador de Editais - IA</h1>
+            <p>Sistema inteligente de análise de editais de concursos públicos</p>
+        </div>
+
+        <div class="main-content">
+            <div class="input-section">
+                <h2>📝 Análise de Edital</h2>
+                
+                <div class="sample-buttons">
+                    <button class="btn-sample" onclick="loadSampleEdital()">📄 Carregar Exemplo</button>
+                    <button class="btn-sample" onclick="clearForm()">🗑️ Limpar</button>
+                </div>
+
+                <div class="input-group">
+                    <label for="urlEdital">🔗 URL do Edital (opcional):</label>
+                    <input type="url" id="urlEdital" placeholder="https://exemplo.com/edital.pdf">
+                </div>
+
+                <div class="input-group">
+                    <label for="banca">🏛️ Banca Organizadora (opcional):</label>
+                    <input type="text" id="banca" placeholder="CESPE, FGV, FCC, etc.">
+                </div>
+
+                <div class="input-group">
+                    <label for="conteudoEdital">📋 Conteúdo do Edital:</label>
+                    <textarea id="conteudoEdital" placeholder="Cole aqui o conteúdo do edital que deseja analisar..."></textarea>
+                </div>
+
+                <button class="btn" onclick="analisarEdital()" id="btnAnalisar">
+                    🚀 Analisar Edital
+                </button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analisando edital com IA...</p>
+            </div>
+
+            <div class="results" id="results">
+                <h2>📊 Resultados da Análise</h2>
+                <div id="resultsContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8002';
+
+        async function analisarEdital() {
+            const conteudo = document.getElementById('conteudoEdital').value.trim();
+            const urlEdital = document.getElementById('urlEdital').value.trim();
+            const banca = document.getElementById('banca').value.trim();
+
+            if (!conteudo) {
+                alert('Por favor, insira o conteúdo do edital para análise.');
+                return;
+            }
+
+            if (conteudo.length < 100) {
+                alert('O conteúdo do edital deve ter pelo menos 100 caracteres.');
+                return;
+            }
+
+            // Mostrar loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('btnAnalisar').disabled = true;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/analyze`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        conteudo: conteudo,
+                        url_edital: urlEdital || null,
+                        banca: banca || null
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    exibirResultados(data);
+                } else {
+                    throw new Error(data.detail || 'Erro na análise');
+                }
+
+            } catch (error) {
+                console.error('Erro:', error);
+                alert(`Erro na análise: ${error.message}`);
+            } finally {
+                // Esconder loading
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('btnAnalisar').disabled = false;
+            }
+        }
+
+        function exibirResultados(data) {
+            const resultsContent = document.getElementById('resultsContent');
+            const resultado = data.resultado;
+
+            let html = `
+                <div class="result-card">
+                    <h3>📋 Informações Básicas</h3>
+                    <div class="result-item">
+                        <span class="result-label">Status:</span>
+                        <span class="result-value status-success">${data.status}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Tempo de Processamento:</span>
+                        <span class="result-value">${data.tempo_processamento.toFixed(2)}s</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Tipo de Documento:</span>
+                        <span class="result-value">${resultado.analise_basica?.tipo_documento || 'N/A'}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Banca Organizadora:</span>
+                        <span class="result-value">${resultado.analise_basica?.banca_organizadora || 'N/A'}</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Órgão Responsável:</span>
+                        <span class="result-value">${resultado.analise_basica?.orgao_responsavel || 'N/A'}</span>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <h3>📊 Estatísticas</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">${resultado.analise_basica?.numero_secoes || 0}</div>
+                            <div class="stat-label">Seções</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${resultado.analise_basica?.palavras_totais || 0}</div>
+                            <div class="stat-label">Palavras</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${resultado.informacoes_extraidas?.disciplinas?.length || 0}</div>
+                            <div class="stat-label">Disciplinas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">${resultado.informacoes_extraidas?.datas?.length || 0}</div>
+                            <div class="stat-label">Datas</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Informações extraídas
+            const info = resultado.informacoes_extraidas || {};
+            
+            if (info.cargos && info.cargos.length > 0) {
+                html += `
+                    <div class="result-card">
+                        <h3>👥 Cargos Identificados</h3>
+                        ${info.cargos.map(cargo => `
+                            <div class="result-item">
+                                <span class="result-label">${cargo.cargo}</span>
+                                <span class="result-value">${cargo.contexto}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            if (info.vagas && info.vagas.length > 0) {
+                html += `
+                    <div class="result-card">
+                        <h3>📈 Vagas</h3>
+                        ${info.vagas.map(vaga => `
+                            <div class="result-item">
+                                <span class="result-label">Número de Vagas:</span>
+                                <span class="result-value">${vaga.numero_vagas}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            if (info.disciplinas && info.disciplinas.length > 0) {
+                html += `
+                    <div class="result-card">
+                        <h3>📚 Disciplinas</h3>
+                        ${info.disciplinas.map(disc => `
+                            <div class="result-item">
+                                <span class="result-label">${disc.disciplina}</span>
+                                <span class="result-value">${disc.tipo}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            if (info.datas && info.datas.length > 0) {
+                html += `
+                    <div class="result-card">
+                        <h3>📅 Datas Importantes</h3>
+                        ${info.datas.map(data => `
+                            <div class="result-item">
+                                <span class="result-label">${data.tipo}:</span>
+                                <span class="result-value">${data.data}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            if (info.valores && info.valores.length > 0) {
+                html += `
+                    <div class="result-card">
+                        <h3>💰 Valores Monetários</h3>
+                        ${info.valores.map(valor => `
+                            <div class="result-item">
+                                <span class="result-label">${valor.tipo}:</span>
+                                <span class="result-value">${valor.valor_formatado}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            if (resultado.resumo_executivo) {
+                html += `
+                    <div class="result-card">
+                        <h3>📝 Resumo Executivo</h3>
+                        <p style="line-height: 1.6; color: #2c3e50;">${resultado.resumo_executivo}</p>
+                    </div>
+                `;
+            }
+
+            if (resultado.analise_relevancia) {
+                const relevancia = resultado.analise_relevancia;
+                html += `
+                    <div class="result-card">
+                        <h3>⭐ Análise de Relevância</h3>
+                        <div class="result-item">
+                            <span class="result-label">Score:</span>
+                            <span class="result-value">${relevancia.score_relevancia}</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Classificação:</span>
+                            <span class="result-value">${relevancia.classificacao}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            resultsContent.innerHTML = html;
+            document.getElementById('results').style.display = 'block';
+        }
+
+        async function loadSampleEdital() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/analyze/sample`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Carregar o edital de exemplo no textarea
+                    const editalExemplo = `
+EDITAL Nº 1 – DGP/DPF, DE 15 DE JUNHO DE 2023
+CONCURSO PÚBLICO PARA O PROVIMENTO DE VAGAS NO CARGO DE AGENTE DE POLÍCIA FEDERAL
+
+O DIRETOR-GERAL DA POLÍCIA FEDERAL, no uso de suas atribuições, torna pública a realização de concurso público para o provimento de 1.500 vagas no cargo de Agente de Polícia Federal.
+
+1 DAS DISPOSIÇÕES PRELIMINARES
+1.1 O concurso público será regido por este edital e executado pelo Centro Brasileiro de Pesquisa em Avaliação e Seleção e de Promoção de Eventos (Cebraspe).
+1.2 O cargo de Agente de Polícia Federal exige nível superior em qualquer área de formação.
+1.3 A remuneração inicial é de R$ 12.522,50.
+
+2 DAS INSCRIÇÕES
+2.1 As inscrições poderão ser realizadas no período de 20/07/2023 a 02/08/2023.
+2.2 A taxa de inscrição é de R$ 180,00.
+
+3 DAS ETAPAS DO CONCURSO
+3.1 Prova Objetiva e Discursiva: 19/09/2023.
+3.2 Exame de Aptidão Física.
+3.3 Avaliação Médica.
+3.4 Avaliação Psicológica.
+
+4 DAS DISCIPLINAS
+Serão cobradas as seguintes disciplinas: Língua Portuguesa, Noções de Direito Administrativo, Noções de Direito Constitucional, Raciocínio Lógico, Informática, Contabilidade Geral.
+                    `;
+                    
+                    document.getElementById('conteudoEdital').value = editalExemplo.trim();
+                    document.getElementById('banca').value = 'CESPE/CEBRASPE';
+                    document.getElementById('urlEdital').value = 'https://exemplo.com/edital-pf';
+                    
+                    alert('Edital de exemplo carregado! Clique em "Analisar Edital" para testar.');
+                } else {
+                    throw new Error('Erro ao carregar exemplo');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao carregar edital de exemplo. Verifique se o servidor está rodando.');
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('conteudoEdital').value = '';
+            document.getElementById('urlEdital').value = '';
+            document.getElementById('banca').value = '';
+            document.getElementById('results').style.display = 'none';
+        }
+
+        // Verificar se o servidor está rodando ao carregar a página
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`);
+                if (response.ok) {
+                    console.log('✅ Servidor conectado com sucesso!');
+                } else {
+                    console.warn('⚠️ Servidor não está respondendo corretamente');
+                }
+            } catch (error) {
+                console.error('❌ Erro ao conectar com o servidor:', error);
+                alert('⚠️ Não foi possível conectar com o servidor. Verifique se está rodando em http://localhost:8002');
+            }
+        });
+    </script>
+</body>
+</html>

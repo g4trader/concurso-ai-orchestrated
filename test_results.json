@@ -1,0 +1,10 @@
+{
+  "Backend Health": true,
+  "Frontend Access": true,
+  "Dashboard Access": true,
+  "Analise Editais Page": true,
+  "Carregar Exemplo": false,
+  "Analise Edital": false,
+  "Navegacao Dashboard": false,
+  "API Direct": true
+}

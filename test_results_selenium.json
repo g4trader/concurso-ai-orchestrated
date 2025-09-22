@@ -1,0 +1,10 @@
+{
+  "Backend Health": true,
+  "API Concursos": true,
+  "Frontend Access": true,
+  "P\u00e1gina Sele\u00e7\u00e3o": true,
+  "Filtros Concursos": true,
+  "Sele\u00e7\u00e3o Concurso": false,
+  "An\u00e1lise Autom\u00e1tica": false,
+  "Navega\u00e7\u00e3o Completa": false
+}

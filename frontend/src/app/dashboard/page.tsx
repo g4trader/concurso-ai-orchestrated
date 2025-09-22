@@ -5,6 +5,7 @@ import { AuthGuard } from '@/components/auth/auth-guard'
 import { StatsCard } from '@/components/dashboard/stats-card'
 import { RecentSimulados } from '@/components/dashboard/recent-simulados'
 import { ProgressChart } from '@/components/dashboard/progress-chart'
+import { StudyMaterials } from '@/components/dashboard/study-materials'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/use-auth'
@@ -111,6 +112,12 @@ export default function DashboardPage() {
                 Novo Simulado
               </Button>
             </Link>
+            <Link href="/analise-editais">
+              <Button variant="outline" className="flex items-center gap-2">
+                <span className="text-lg">🧠</span>
+                Análise de Editais
+              </Button>
+            </Link>
             <Link href="/resultados">
               <Button variant="outline">
                 Ver Resultados
@@ -155,17 +162,54 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        <div className="grid lg:grid-cols-2 gap-6 mb-8">
+          <StudyMaterials />
+          <div className="bg-white rounded-lg shadow-sm border p-6">
+            <h2 className="text-xl font-semibold text-gray-700 mb-4">Dicas de Estudo</h2>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <div className="text-2xl">🎯</div>
+                <div>
+                  <h3 className="font-medium text-gray-900">Foque nas suas fraquezas</h3>
+                  <p className="text-sm text-gray-600">Identifique as disciplinas com menor performance e dedique mais tempo a elas.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="text-2xl">⏰</div>
+                <div>
+                  <h3 className="font-medium text-gray-900">Estude com regularidade</h3>
+                  <p className="text-sm text-gray-600">Consistência é mais importante que intensidade. Estude um pouco todos os dias.</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="text-2xl">📊</div>
+                <div>
+                  <h3 className="font-medium text-gray-900">Acompanhe seu progresso</h3>
+                  <p className="text-sm text-gray-600">Use os simulados para medir sua evolução e ajustar sua estratégia.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Seção de Ações Rápidas */}
         <div className="bg-white rounded-lg shadow-sm border p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
             Ações Rápidas
           </h2>
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-4 gap-4">
             <Link href="/gerador-simulado">
               <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
                 <div className="text-2xl mb-2">📝</div>
                 <h3 className="font-medium text-gray-900">Criar Simulado</h3>
                 <p className="text-sm text-gray-600">Gere um novo simulado personalizado</p>
+              </div>
+            </Link>
+            <Link href="/analise-editais">
+              <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                <div className="text-2xl mb-2">🧠</div>
+                <h3 className="font-medium text-gray-900">Análise de Editais</h3>
+                <p className="text-sm text-gray-600">Analise editais com IA</p>
               </div>
             </Link>
             <Link href="/resultados">
